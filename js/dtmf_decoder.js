@@ -6,23 +6,24 @@ if (navigator.getUserMedia === undefined) {
 var audiosources = [];
 
 if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
-navigator.mediaDevices.enumerateDevices()
-	.then(gotDevices)
-	.catch(function(err) {
-	    alert(err.name + ": " + err.message);
-	});
+    navigator.mediaDevices.enumerateDevices()
+	    .then(gotDevices)
+	    .catch(function(err) {
+		alert(err.name + ": " + err.message);
+	    });
 
-} else if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined){
+} else if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
     navigator.MediaStreamTrack.getSources(gotDevices);
 } else {
-    alert("This browser don't support work with media devices" );
+    alert("This browser don't support work with media devices");
 }
 
 var breakLoop = false;
 // List cameras and microphones.
 function gotDevices(devices) {
     for (var i = 0; i < devices.length; i++) {
-	if (breakLoop) break;
+	if (breakLoop)
+	    break;
 	if (devices[i].kind === 'audioinput') {
 	    audiosources.push(devices[i].deviceId);
 	    if (navigator.getUserMedia) {
@@ -33,7 +34,7 @@ function gotDevices(devices) {
 //			    }]
 //		    }
 		}, success, function(e) {
-		    alert('Error capturing audio.'+e.name);
+		    alert('Error capturing audio.' + e.name);
 		});
 	    } else
 		alert('getUserMedia not supported in this browser.');
