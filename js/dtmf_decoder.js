@@ -5,8 +5,17 @@ if (navigator.getUserMedia === undefined) {
 
 var audiosources = [];
 
-if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-    alert("enumerateDevices() not supported.");
+if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
+navigator.mediaDevices.enumerateDevices()
+	.then(gotDevices)
+	.catch(function(err) {
+	    alert(err.name + ": " + err.message);
+	});
+
+} else if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined){
+    navigator.MediaStreamTrack.getSources(gotDevices);
+} else {
+    alert("This browser don't support work with media devices" );
 }
 
 var breakLoop = false;
@@ -14,7 +23,7 @@ var breakLoop = false;
 function gotDevices(devices) {
     for (var i = 0; i < devices.length; i++) {
 	if (breakLoop) break;
-	if (devices[i].kind == 'audioinput') {
+	if (devices[i].kind === 'audioinput') {
 	    audiosources.push(devices[i].deviceId);
 	    if (navigator.getUserMedia) {
 		navigator.getUserMedia({audio: true, sourceId: devices[i].deviceId
@@ -31,12 +40,6 @@ function gotDevices(devices) {
 	}
     }
 }
-
-navigator.mediaDevices.enumerateDevices()
-	.then(gotDevices)
-	.catch(function(err) {
-	    alert(err.name + ": " + err.message);
-	});
 
 
 
