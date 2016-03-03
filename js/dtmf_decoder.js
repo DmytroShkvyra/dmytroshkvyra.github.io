@@ -14,7 +14,7 @@ if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevi
 } else if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
     navigator.MediaStreamTrack.getSources(gotDevices);
 } else {
-    alert("This browser don't support work with media devices");
+    alert("This browser doesn't support work with media devices");
 }
 
 var breakLoop = false;
