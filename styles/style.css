@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 01.03.2016, 21:36:04
+    Author     : USer
+*/
+input.style {
+    bottom: auto;
+    right: auto;
+    width: auto;
+    height: 100%;
+    min-height: 961px;   
+}
+
+element.style {
+    bottom: auto;
+    right: auto;
+    width: auto;
+    height: 100%;
+    min-height: 961px;
+}
+
+html, body {
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
+}
+body {
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    color: #212121;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    margin: 0;
+    -webkit-text-size-adjust: 100%;
+    -text-size-adjust: 100%
+}    
