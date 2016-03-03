@@ -3,8 +3,6 @@ if (navigator.getUserMedia === undefined) {
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
 }
 
-var audiosources = [];
-
 if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
     navigator.mediaDevices.enumerateDevices()
 	    .then(gotDevices)
@@ -24,7 +22,6 @@ function gotDevices(devices) {
 	if (breakLoop)
 	    break;
 	if (devices[i].kind === 'audioinput') {
-	    audiosources.push(devices[i].deviceId);
 	    if (navigator.getUserMedia) {
 		navigator.getUserMedia({audio: true, sourceId: devices[i].deviceId
 //		    {
