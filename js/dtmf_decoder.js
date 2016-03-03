@@ -11,7 +11,6 @@ if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevi
 	    .catch(function(err) {
 		alert(err.name + ": " + err.message);
 	    });
-
 } else if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
     navigator.MediaStreamTrack.getSources(gotDevices);
 } else {
