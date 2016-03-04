@@ -125,7 +125,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	   sigma += Math.pow((symbolsEnergy[key] - avgEnergy), 2); 
 	}
 	sigma = Math.sqrt(sigma /= (sym_lengt-1));
-	var sigma3 = sigma/**2*/;
+	var sigma3 = sigma*1.5;
 	var clearSymbols = {};
 	sym_lengt = 0;
 	for (var key in symbolsEnergy) {
@@ -158,6 +158,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 		if (this.repeatCounter === this.repeatMin) {
 		    result.push(value);
 		    ref = this.decodeHandlers;
+		    console.log(this.firstPreviousValue);
 		    for (j = 0, len = ref.length; j < len; j++) {
 			handler = ref[j];
 			setTimeout(handler(value), 0);
