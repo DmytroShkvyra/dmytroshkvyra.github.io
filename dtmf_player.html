@@ -27,10 +27,9 @@ function createQR(text){
     jQuery('#qrcode').qrcode(qr_data);	    
 }
 
-createQR('1234567890#*ABCD');
 </script>   
     </head>
-    <body>
+    <body onload="createQR(document.getElementById('code').value);">
 	<div id="controls">
 	<div>
 	    <div><input id="code" value="1234567890#*ABCD" oninput="createQR(document.getElementById('code').value);"/></div>
