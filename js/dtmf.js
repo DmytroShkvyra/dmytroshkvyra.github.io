@@ -55,8 +55,8 @@ DTMF = (function() {
 	});
 	this.repeatMin = options.repeatMin;
 	this.decodeHandlers = [];
-	this.globalAVGEnergy = 0;
-	this.globalSigma = 0;
+	//this.globalAVGEnergy = 0;
+	//this.globalSigma = 0;
     }
 
     DTMF.prototype.energyProfileToCharacter = function(register) {
@@ -102,49 +102,49 @@ DTMF = (function() {
 	    };
 	})(this));
 //--------------------------------------------
-{
-	var dtmf_sym = 
-JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
-             "4":[770,1209],"5":[770,1336],"6":[770,1477],"B":[770,1633],\n\
-	     "7":[852,1209],"8":[852,1336],"9":[852,1477],"C":[852,1633],\n\
-	     "*":[941,1209],"0":[941,1336],"#":[941,1477],"D":[941,1633]\n\
-             }');
-	var symbolsEnergy = {};
-	var avgEnergy = 0;
-	var sym_lengt = 0;
-	for (var key in dtmf_sym) {
-	    sym_lengt++;
-	    frqArr = dtmf_sym[key];
-	    var energy = 1.0;
-	    for(var i=0; i<frqArr.length; i++){
-		energy *= Math.sqrt(this.goertzel.energies[frqArr[i]]);
-	    }
-	    symbolsEnergy[key] = energy;
-	    avgEnergy += energy;
-	}
-	avgEnergy /= sym_lengt;
-	this.globalAVGEnergy = (this.globalAVGEnergy + avgEnergy)/2.0;
-	var sigma = 0.0;
-	for (var key in symbolsEnergy) {
-	   sigma += Math.pow((symbolsEnergy[key] - this.globalAVGEnergy), 2); 
-	}
-	sigma = Math.sqrt(sigma /= sym_lengt);
-	this.globalSigma = (this.globalSigma + sigma)/2;
-	var sigma3 = this.globalSigma*5;
-	var clearSymbols = {};
-	var arrSym = [];
-	sym_lengt = 0;
-	for (var key in symbolsEnergy) {
-	    if(symbolsEnergy[key] > (sigma3 + this.globalAVGEnergy)){
-		clearSymbols[key]= symbolsEnergy[key];
-		arrSym.push(key);
-		sym_lengt++;
-	    }
-	}
-	if (sym_lengt > 0){ 
-	   console.log("arrSym =" + arrSym + "\nsigma3="+sigma3 + "\navgEnergy="+this.globalAVGEnergy);
-	}
-}	
+//{
+//	var dtmf_sym = 
+//JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
+//             "4":[770,1209],"5":[770,1336],"6":[770,1477],"B":[770,1633],\n\
+//	     "7":[852,1209],"8":[852,1336],"9":[852,1477],"C":[852,1633],\n\
+//	     "*":[941,1209],"0":[941,1336],"#":[941,1477],"D":[941,1633]\n\
+//             }');
+//	var symbolsEnergy = {};
+//	var avgEnergy = 0;
+//	var sym_lengt = 0;
+//	for (var key in dtmf_sym) {
+//	    sym_lengt++;
+//	    frqArr = dtmf_sym[key];
+//	    var energy = 1.0;
+//	    for(var i=0; i<frqArr.length; i++){
+//		energy *= Math.sqrt(this.goertzel.energies[frqArr[i]]);
+//	    }
+//	    symbolsEnergy[key] = energy;
+//	    avgEnergy += energy;
+//	}
+//	avgEnergy /= sym_lengt;
+//	this.globalAVGEnergy = (this.globalAVGEnergy + avgEnergy)/2.0;
+//	var sigma = 0.0;
+//	for (var key in symbolsEnergy) {
+//	   sigma += Math.pow((symbolsEnergy[key] - this.globalAVGEnergy), 2); 
+//	}
+//	sigma = Math.sqrt(sigma /= sym_lengt);
+//	this.globalSigma = (this.globalSigma + sigma)/2;
+//	var sigma3 = this.globalSigma*5;
+//	var clearSymbols = {};
+//	var arrSym = [];
+//	sym_lengt = 0;
+//	for (var key in symbolsEnergy) {
+//	    if(symbolsEnergy[key] > (sigma3 + this.globalAVGEnergy)){
+//		clearSymbols[key]= symbolsEnergy[key];
+//		arrSym.push(key);
+//		sym_lengt++;
+//	    }
+//	}
+//	if (sym_lengt > 0){ 
+//	   console.log("arrSym =" + arrSym + "\nsigma3="+sigma3 + "\navgEnergy="+this.globalAVGEnergy);
+//	}
+//}	
 //--------------------------------------------------	
 	i = 0;
 	highEnergies = [];
@@ -166,7 +166,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 		if (this.repeatCounter === this.repeatMin) {
 		    result.push(value);
 		    ref = this.decodeHandlers;
-		    console.log(this.firstPreviousValue);
+		    //console.log(this.firstPreviousValue);
 		    for (j = 0, len = ref.length; j < len; j++) {
 			handler = ref[j];
 			setTimeout(handler(value), 0);
