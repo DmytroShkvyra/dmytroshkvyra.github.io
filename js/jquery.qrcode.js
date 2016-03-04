@@ -28,6 +28,10 @@
 			canvas.width	= options.width;
 			canvas.height	= options.height;
 			var ctx		= canvas.getContext('2d');
+			ctx.save();
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.globalAlpha=1;                
+			ctx.beginPath();
 
 			// compute tileW/tileH based on options.width/options.height
 			var tileW	= options.width  / qrcode.getModuleCount();
@@ -43,6 +47,8 @@
 				}	
 			}
 			// return just built canvas
+			ctx.clip();                        
+			ctx.restore();
 			return canvas;
 		}
 

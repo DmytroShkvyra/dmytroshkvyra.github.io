@@ -14,7 +14,7 @@
 function isCanvasSupported(){
   var elem = document.createElement('canvas');
   res = !!(elem.getContext && elem.getContext('2d'));
-  elem.parentNode.removeChild(elem);
+  elem = null;
   return res;
 }
 
