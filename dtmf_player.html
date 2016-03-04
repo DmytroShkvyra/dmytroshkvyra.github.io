@@ -13,7 +13,9 @@
 <script>
 function isCanvasSupported(){
   var elem = document.createElement('canvas');
-  return !!(elem.getContext && elem.getContext('2d'));
+  res = !!(elem.getContext && elem.getContext('2d'));
+  elem.parentNode.removeChild();
+  return res;
 }
 
 function createQR(text){
