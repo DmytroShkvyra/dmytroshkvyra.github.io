@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+	<title>Get location</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name='viewport' content="width=device-width, initial-scale=1" />
+	<link href="/styles/style.css" media="all" rel="stylesheet" />
+	<script>
+	    function success(position) {
+	    alert('position.coords.latitude=' + position.coords.latitude + '\nposition.coords.longitude='
+		    + position.coords.longitude + '\nposition.coords.accuracy=' + position.coords.accuracy);
+		    }
+
+	    navigator.permissions.query({name:'geolocation'}).then(function(result) {
+	    if (result.state == 'granted') {
+	    if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(success, alert);
+		    } else {
+	    error('not supported');
+		    }
+	    } else if (result.state == 'prompt') {
+	    navigator.geolocation.getCurrentPosition(success, alert);
+	    }
+	    // Don't do anything if the permission was denied.
+	    }).catch(function(error) {alert(error);});
+	</script>
+    </head>
+    <body>
+	<a href="https://dmytroshkvyra.github.io/">Back</a>
+    </body>
+</html>
