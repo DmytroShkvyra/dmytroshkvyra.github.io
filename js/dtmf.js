@@ -56,6 +56,7 @@ DTMF = (function() {
 	this.repeatMin = options.repeatMin;
 	this.decodeHandlers = [];
 	this.globalAVGEnergy = 0;
+	this.globalSigma = 0;
     }
 
     DTMF.prototype.energyProfileToCharacter = function(register) {
@@ -128,7 +129,8 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	   sigma += Math.pow((symbolsEnergy[key] - this.globalAVGEnergy), 2); 
 	}
 	sigma = Math.sqrt(sigma /= sym_lengt);
-	var sigma3 = sigma*3.375;
+	this.globalSigma = (this.globalSigma + sigma)/2;
+	var sigma3 = this.globalSigma*3.375;
 	var clearSymbols = {};
 	var arrSym = [];
 	sym_lengt = 0;
