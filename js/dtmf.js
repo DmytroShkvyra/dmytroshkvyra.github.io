@@ -115,7 +115,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	    frqArr = dtmf_sym[key];
 	    var energy = 1.0;
 	    for(var i=0; i<frqArr.length; i++){
-		energy *= Math.sqrt(frqArr[i]);
+		energy *= Math.sqrt(this.goertzel.energies[frqArr[i]]);
 	    }
 	    symbolsEnergy[key] = energy;
 	    avgEnergy += energy;
