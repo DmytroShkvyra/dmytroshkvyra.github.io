@@ -22,6 +22,7 @@ if (navigator.geolocation) {
 }
  } else if (result.state == 'prompt') {
    alert('showButtonToEnableLocalNews()');
+   navigator.geolocation.getCurrentPosition(success, alert);
  }
  // Don't do anything if the permission was denied.
 }).catch(error => { alert(error); });
