@@ -128,7 +128,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	   sigma += Math.pow((symbolsEnergy[key] - this.globalAVGEnergy), 2); 
 	}
 	sigma = Math.sqrt(sigma /= sym_lengt);
-	var sigma3 = sigma*3.125;
+	var sigma3 = sigma*3.375;
 	var clearSymbols = {};
 	var arrSym = [];
 	sym_lengt = 0;
