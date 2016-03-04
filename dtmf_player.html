@@ -9,7 +9,7 @@
 	<link href="/styles/style.css" media="all" rel="stylesheet" />
 	<script>
 	    navigator.permissions.query({name:'bluetooth'});
-	    navigator.bluetooth.requestDevice(/*{ filters: [{ services: ['battery_service'] }] }*/)
+	    navigator.bluetooth.requestDevice({ filters: [{ services: ['battery_service','generic_access'] }] })
 .then(device => {alert(device.name +':'+ device.uuids)})
 .catch(error => { alert(error); });
 	</script>
