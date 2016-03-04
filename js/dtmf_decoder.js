@@ -44,6 +44,7 @@ function success(e) {
     breakLoop = true; //break loop of trying audiosources
     audioContext = window.AudioContext || window.webkitAudioContext;
     context = new audioContext();
+    alert(context.sampleRate);
     volume = context.createGain();
     audioInput = context.createMediaStreamSource(e);
     audioInput.connect(volume);
@@ -52,7 +53,7 @@ function success(e) {
     var outputElement = document.querySelector('#output');
     var dtmf = new DTMF({
 	sampleRate: context.sampleRate,
-	peakFilterSensitivity: 0.5,
+	peakFilterSensitivity: 0.2,
 	repeatMin: 4,
 	downsampleRate: 1,
 	threshold: 0.005
