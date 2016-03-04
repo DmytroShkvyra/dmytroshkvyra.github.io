@@ -99,6 +99,45 @@ DTMF = (function() {
 		return value = _this.energyProfileToCharacter(_this.goertzel);
 	    };
 	})(this));
+//--------------------------------------------
+	var dtmf_sym = 
+JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
+             "4":[770,1209],"5":[770,1336],"6":[770,1477],"B":[770,1633],\n\
+	     "7":[852,1209],"8":[852,1336],"9":[852,1477],"C":[852,1633],\n\
+	     "*":[941,1209],"0":[941,1336],"#":[941,1477],"D":[941,1633]\n\
+             }');
+	var symbolsEnergy = {};
+	var avgEnergy = 0;
+	var sym_lengt = 0;
+	for (var key in dtmf_sym) {
+	    sym_lengt++;
+	    frqArr = dtmf_sym[key];
+	    var energy = 1.0;
+	    for(var i=0; i<frqArr.length; i++){
+		energy *= Math.sqrt(frqArr[i]);
+	    }
+	    symbolsEnergy[key] = energy;
+	    avgEnergy += energy;
+	}
+	avgEnergy /= sym_lengt;
+	var sigma = 0.0;
+	for (var key in symbolsEnergy) {
+	   sigma += Math.pow((symbolsEnergy[key] - avgEnergy), 2); 
+	}
+	sigma = Math.sqrt(sigma /= sym_lengt);
+	var sigma3 = sigma*3;
+	var clearSymbols = {};
+	sym_lengt = 0;
+	for (var key in symbolsEnergy) {
+	    if(symbolsEnergy[key] > sigma3){
+		clearSymbols[key]= symbolsEnergy[key];
+		sym_lengt++;
+	    }
+	}
+	if (sym_lengt > 0){
+	   console.log(clearSymbols);
+	}
+//--------------------------------------------------	
 	i = 0;
 	highEnergies = [];
 	while (i < this.highFrequencies.length) {
