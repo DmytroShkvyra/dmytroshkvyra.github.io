@@ -33,7 +33,7 @@ createQR('1234567890#*ABCD');
     <body>
 	<div>
 	    <div><input id="code" value="1234567890#*ABCD" oninput="createQR(document.getElementById('code').value);"/></div>
-	    <input type="submit" value="Play" onclick="playDialtoneString(document.getElementById('code').value);"/>
+	    <div><input type="submit" value="Play" onclick="playDialtoneString(document.getElementById('code').value);"/></div>
 	    <div id="qrcode"></div>
 	</div>
 	<div>
