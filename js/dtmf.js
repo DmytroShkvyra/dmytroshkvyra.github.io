@@ -55,6 +55,7 @@ DTMF = (function() {
 	});
 	this.repeatMin = options.repeatMin;
 	this.decodeHandlers = [];
+	this.globalAVGEnergy = 0;
     }
 
     DTMF.prototype.energyProfileToCharacter = function(register) {
@@ -121,22 +122,25 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	    avgEnergy += energy;
 	}
 	avgEnergy /= sym_lengt;
+	this.globalAVGEnergy = (this.globalAVGEnergy + avgEnergy)/2.0;
 	var sigma = 0.0;
 	for (var key in symbolsEnergy) {
-	   sigma += Math.pow((symbolsEnergy[key] - avgEnergy), 2); 
+	   sigma += Math.pow((symbolsEnergy[key] - this.globalAVGEnergy), 2); 
 	}
-	sigma = Math.sqrt(sigma /= (sym_lengt-1));
+	sigma = Math.sqrt(sigma /= sym_lengt);
 	var sigma3 = sigma*3.125;
 	var clearSymbols = {};
+	var arrSym = [];
 	sym_lengt = 0;
 	for (var key in symbolsEnergy) {
-	    if(symbolsEnergy[key] > (sigma3 + avgEnergy)){
+	    if(symbolsEnergy[key] > (sigma3 + this.globalAVGEnergy)){
 		clearSymbols[key]= symbolsEnergy[key];
+		arrSym.push(key);
 		sym_lengt++;
 	    }
 	}
 	if (sym_lengt > 0){ 
-	   console.log("sym_lengt =" + sym_lengt + "\nsigma3="+sigma3 + "\navgEnergy="+avgEnergy);
+	   console.log("arrSym =" + arrSym + "\nsigma3="+sigma3 + "\navgEnergy="+this.globalAVGEnergy);
 	}
 }	
 //--------------------------------------------------	
