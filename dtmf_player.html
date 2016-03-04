@@ -31,13 +31,13 @@ createQR('1234567890#*ABCD');
 </script>   
     </head>
     <body>
-	<div>
+	<div id="controls">
 	<div>
 	    <div><input id="code" value="1234567890#*ABCD" oninput="createQR(document.getElementById('code').value);"/></div>
 	    <div><input type="submit" value="Play" onclick="playDialtoneString(document.getElementById('code').value);"/></div>
 	</div>
 	<div id="qrcode"></div>
-	<div>
+	<div id="ref">
 	<a href="https://dmytroshkvyra.github.io/">Back</a>
 	</div>
 	</div>

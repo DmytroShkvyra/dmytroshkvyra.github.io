@@ -49,3 +49,11 @@ div#qrcode {
     margin-bottom: 10%;
     background-color: white;
 }
+
+div#controls {
+    background-color: white;
+}
+
+div#ref {
+    background-color: darkblue;
+}
