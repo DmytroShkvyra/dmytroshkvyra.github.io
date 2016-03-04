@@ -100,6 +100,7 @@ DTMF = (function() {
 	    };
 	})(this));
 //--------------------------------------------
+{
 	var dtmf_sym = 
 JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
              "4":[770,1209],"5":[770,1336],"6":[770,1477],"B":[770,1633],\n\
@@ -125,7 +126,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	   sigma += Math.pow((symbolsEnergy[key] - avgEnergy), 2); 
 	}
 	sigma = Math.sqrt(sigma /= (sym_lengt-1));
-	var sigma3 = sigma*1.5;
+	var sigma3 = sigma*2;
 	var clearSymbols = {};
 	sym_lengt = 0;
 	for (var key in symbolsEnergy) {
@@ -137,6 +138,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	if (sym_lengt > 0){ 
 	   console.log("clearSymbols =" + clearSymbols + "\nsigma="+sigma + "\navgEnergy="+avgEnergy);
 	}
+}	
 //--------------------------------------------------	
 	i = 0;
 	highEnergies = [];
