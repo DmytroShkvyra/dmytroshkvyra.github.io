@@ -52,7 +52,7 @@ function success(e) {
     var outputElement = document.querySelector('#output');
     var dtmf = new DTMF({
 	sampleRate: context.sampleRate,
-	peakFilterSensitivity: 1.1,
+	peakFilterSensitivity: 0.5,
 	repeatMin: 4,
 	downsampleRate: 1,
 	threshold: 0.005
