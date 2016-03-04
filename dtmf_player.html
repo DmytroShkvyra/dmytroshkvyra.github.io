@@ -14,13 +14,13 @@ function success(position) {
 }	    
 	    
 	    navigator.permissions.query({name:'geolocation'}).then(function(result) {
- if (result.status == 'granted') {
+ if (result.state == 'granted') {
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(success, alert);
 } else {
   error('not supported');
 }
- } else if (result.status == 'prompt') {
+ } else if (result.state == 'prompt') {
    alert('showButtonToEnableLocalNews()');
  }
  // Don't do anything if the permission was denied.
