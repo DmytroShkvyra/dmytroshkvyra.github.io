@@ -5,7 +5,7 @@ function connectDevice(device) {
    
 // Simple
         
-permissions.query({ name: 'bluetooth' })
+navigator.permissions.query({ name: 'bluetooth' })
 .then(function(permission) {
   if (permission.state != 'granted') {
     console.log('User has forbidden websites to use bluetooth...');
@@ -33,7 +33,7 @@ permissions.query({ name: 'bluetooth' })
 
 // Restore
 
-permissions.query({ name: 'bluetooth', deviceId: '123' })
+navigator.permissions.query({ name: 'bluetooth', deviceId: '123' })
 .then(function(permission){
   if (permission.state != 'granted') {
     console.log('User has forbidden websites to use bluetooth...');
