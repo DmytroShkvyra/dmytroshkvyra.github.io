@@ -134,8 +134,8 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 		sym_lengt++;
 	    }
 	}
-	if (sym_lengt > 0){
-	   console.log(clearSymbols);
+	if (sym_lengt > 0){ 
+	   console.log("clearSymbols =" + clearSymbols + "\nsigma="+sigma + "\navgEnergy="+avgEnergy);
 	}
 //--------------------------------------------------	
 	i = 0;
