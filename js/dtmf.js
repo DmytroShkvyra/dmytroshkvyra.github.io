@@ -129,7 +129,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	var clearSymbols = {};
 	sym_lengt = 0;
 	for (var key in symbolsEnergy) {
-	    if(symbolsEnergy[key] > sigma3){
+	    if(symbolsEnergy[key] > (sigma3 + avgEnergy)){
 		clearSymbols[key]= symbolsEnergy[key];
 		sym_lengt++;
 	    }
