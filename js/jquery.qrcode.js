@@ -88,6 +88,7 @@
   
 
 		return this.each(function(){
+		        $('#qrcode').empty();
 			var element	= options.render == "canvas" ? createCanvas() : createTable();
 			jQuery(element).appendTo(this);
 		});
