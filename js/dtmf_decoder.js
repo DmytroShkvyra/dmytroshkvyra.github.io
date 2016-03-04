@@ -55,7 +55,7 @@ function success(e) {
 	peakFilterSensitivity: 1.4,
 	repeatMin: 6,
 	downsampleRate: 1,
-	threshold: 0.05
+	threshold: 0.005
     });
     dtmf.on("decode", function(value) {
 	if (value != null) {
