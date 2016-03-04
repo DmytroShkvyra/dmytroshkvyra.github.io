@@ -130,7 +130,7 @@ JSON.parse('{"1":[697,1209],"2":[697,1336],"3":[697,1477],"A":[697,1633],\n\
 	}
 	sigma = Math.sqrt(sigma /= sym_lengt);
 	this.globalSigma = (this.globalSigma + sigma)/2;
-	var sigma3 = this.globalSigma*3.375;
+	var sigma3 = this.globalSigma*4;
 	var clearSymbols = {};
 	var arrSym = [];
 	sym_lengt = 0;
