@@ -1,12 +1,12 @@
 function connectDevice(device) {
   return device.connectGATT()
-  .then(...)
+  .then(function(device){alert(device);})
 }
    
 // Simple
         
 permissions.query({ name: 'bluetooth' })
-.then(permission => {
+.then(function(permission) {
   if (permission.state != 'granted') {
     console.log('User has forbidden websites to use bluetooth...');
     return;
@@ -22,7 +22,7 @@ permissions.query({ name: 'bluetooth' })
   }
   // Prompt user to pick a nearby hearth rate sensor. 
   return permissions.request({ name: 'bluetooth', filters: [{ services: ['heart_rate'] }] })
-  .then(result => {
+  .then(function(result){
     if (result.state != 'granted') {
       return;
     }
@@ -34,7 +34,7 @@ permissions.query({ name: 'bluetooth' })
 // Restore
 
 permissions.query({ name: 'bluetooth', deviceId: '123' })
-.then(permission => {
+.then(function(permission){
   if (permission.state != 'granted') {
     console.log('User has forbidden websites to use bluetooth...');
     return;
