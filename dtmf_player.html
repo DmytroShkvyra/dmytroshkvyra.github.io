@@ -19,12 +19,13 @@ function isCanvasSupported(){
 function createQR(text){
     var qr_data = {text: text};
 
-    if (isCanvasSupported()){
+    if (!isCanvasSupported()){
 	qr_data.render = "table";
     }
-
     jQuery('#qrcode').qrcode(qr_data);	    
-}	
+}
+
+createQR(document.getElementById('code').value);
 </script>   
     </head>
     <body>

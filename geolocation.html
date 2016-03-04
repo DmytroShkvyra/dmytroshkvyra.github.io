@@ -7,22 +7,26 @@
 	<meta name='viewport' content="width=device-width, initial-scale=1" />
 	<link href="/styles/style.css" media="all" rel="stylesheet" />
 	<script>
-	function success(position) {
-	alert('position.coords.latitude=' + position.coords.latitude + '\nposition.coords.longitude='
-		+ position.coords.longitude + '\nposition.coords.accuracy=' + position.coords.accuracy);
-		}
-        if (navigator.permissions !== undefined){
-	    navigator.permissions.query({name:'geolocation'}).then(function(result) {
-	    if (result.state == 'granted'|| result.state == 'prompt' ) {
-	    if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(success, alert);
-	    } else {
-		error('not supported');
+	    function success(position) {
+		alert('position.coords.latitude=' + position.coords.latitude + '\nposition.coords.longitude='
+			+ position.coords.longitude + '\nposition.coords.accuracy=' + position.coords.accuracy);
 	    }
-	    }).catch(function(error) {alert(error);});
-	} else {
-	   navigator.geolocation.getCurrentPosition(success, alert); 
-	}
+	    if (navigator.geolocation) {
+		if (navigator.permissions !== undefined) {
+		    navigator.permissions.query({name: 'geolocation'}).then(function(result) {
+			if (result.state == 'granted' || result.state == 'prompt') {
+
+			    navigator.geolocation.getCurrentPosition(success, alert);
+			} else {
+			    alert('not supported');
+			}
+		    });
+		} else {
+		    navigator.geolocation.getCurrentPosition(success, alert);
+		}
+	    } else {
+		alert('not supported');
+	    }
 	</script>
     </head>
     <body>
