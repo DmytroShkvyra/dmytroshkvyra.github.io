@@ -6,11 +6,33 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name='viewport' content="width=device-width, initial-scale=1" />
 	<script src='/js/dtmf_play.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.qrcode.js"></script>
+	<script type="text/javascript" src="/js/qrcode.js"></script>
 	<link href="/styles/style.css" media="all" rel="stylesheet" />
+<script>
+function isCanvasSupported(){
+  var elem = document.createElement('canvas');
+  return !!(elem.getContext && elem.getContext('2d'));
+}
+
+function createQR(text){
+    var qr_data = {text: text};
+
+    if (isCanvasSupported()){
+	qr_data.render = "table";
+    }
+
+    jQuery('#qrcode').qrcode(qr_data);	    
+}	
+</script>   
     </head>
     <body>
-	<div><div><input id="code" value="1234567890#*ABCD"/>
-	    </div><input type="submit" value="Play" onclick="playDialtoneString(document.getElementById('code').value);"/><div></div></div>
+	<div>
+	    <div><input id="code" value="1234567890#*ABCD" onchange="createQR(document.getElementById('code').value);"/></div>
+	    <input type="submit" value="Play" onclick="playDialtoneString(document.getElementById('code').value);"/>
+	    <div id="qrcode"></div>
+	</div>
 	<a href="https://dmytroshkvyra.github.io/">Back</a>
     </body>
 </html>
