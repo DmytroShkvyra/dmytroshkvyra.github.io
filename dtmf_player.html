@@ -24,7 +24,7 @@
 	    navigator.geolocation.getCurrentPosition(success, alert);
 	    }
 	    // Don't do anything if the permission was denied.
-	    }).catch(error = > { alert(error)});
+	    }).catch(function(error) {alert(error)});
 	    
 	    navigator.permissions.query({name:'bluetooth'}).then(function(result) {
 	    if (result.state == 'granted') {
