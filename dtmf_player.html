@@ -24,13 +24,13 @@
 	    navigator.geolocation.getCurrentPosition(success, alert);
 	    }
 	    // Don't do anything if the permission was denied.
-	    }).catch(function(error) {alert(error)});
+	    }).catch(function(error) {alert(error);});
 	    
 	    navigator.permissions.query({name:'bluetooth'}).then(function(result) {
 	    if (result.state == 'granted') {
 	    navigator.bluetooth.requestDevice({ filters: [{ services: ['battery_service', 'generic_access'] }] })
-		    .then(device = > {alert(device.name + ':' + device.uuids)})
-		    .catch(error = > { alert(error); });
+		    .then(function(device) {alert(device.name + ':' + device.uuids);})
+		    .catch(function(error) {alert(error);});
 	    } else if (result.state == 'prompt') {
 	    alert('bluetooth state' + result.state);
 	    } else {
