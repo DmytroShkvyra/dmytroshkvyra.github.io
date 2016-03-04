@@ -8,7 +8,8 @@
 	<script src='/js/dtmf_play.js'></script>
 	<link href="/styles/style.css" media="all" rel="stylesheet" />
 	<script>
-	    navigator.bluetooth.requestDevice({ filters: [{ services: ['battery_service'] }] })
+	    navigator.permissions.query({name:'bluetooth'});
+	    navigator.bluetooth.requestDevice(/*{ filters: [{ services: ['battery_service'] }] }*/)
 .then(device => {alert(device.name +':'+ device.uuids)})
 .catch(error => { alert(error); });
 	</script>
