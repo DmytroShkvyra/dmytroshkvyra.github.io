@@ -4,40 +4,39 @@ function UserMedia(){
     this.devices = undefined;
     this._audioContext = window.AudioContext || window.webkitAudioContext;
     this.context = undefined;
+    this.sourceId = 'default';
+    this.kindofmedia = null;
+    this.inout = null;
+    this.req = {};
     if(this._getUserMedia === undefined && navigator.mediaDevices !== undefined){
 	this._getUserMedia = navigator.mediaDevices.getUserMedia;
-    }
-    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
-	navigator.mediaDevices.enumerateDevices()
-	    .then(this.onSuccessDevices).catch(this.onErrorDevices);	
     }
 }
 
 UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, sourceId){
-	req = {};
+    this.success = success;
+    this.error = error;   
+    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
+	navigator.mediaDevices.enumerateDevices()
+	    .then(this.onSuccessDevices).catch(this.onErrorDevices);	
+        }else{
+
 	if (kindofmedia === 'audio') { 
-	  req['audio'] = true;
-	  req['video'] = false;
+	  this.req['audio'] = true;
+	  this.req['video'] = false;
 	} else if (kindofmedia === 'video') {
-	  req['video'] = true;
-	  req['audio'] = false;
+	  this.req['video'] = true;
+	  this.req['audio'] = false;
 	  if (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined){
-	    req['video'] = {};
-	    req['video']['facingMode'] = "environment";
+	    this.req['video'] = {};
+	    this.req['video']['facingMode'] = "environment";
           }
 	}
-	if (sourceId !== null) {
-	  req['sourceId'] = sourceId;  
-	} else if (this.devices !== undefined){
-	  var type = kindofmedia+inout;
-	  for (var i = 0; i < this.devices.length; i++) {
-	     if (this.devices[i].kind === type) {
-		req['sourceId'] = this.devices[i].sourceId;
-		break;
-	     } 
-	  }  
-	}
-	this._getUserMedia(req, success, error);
+	this.sourceId = sourceId;
+	this.inout = inout;
+	this.kindofmedia = kindofmedia;
+	this._getUserMedia(this.req, this.success, this.error);
+    }
     };
 
 UserMedia.prototype.getAudioContext = function(){
@@ -49,6 +48,18 @@ UserMedia.prototype.getAudioContext = function(){
 
 UserMedia.prototype.onSuccessDevices = function(devs){
 	this.devices = devs;
+	if (this.sourceId !== null) {
+	  this.req['sourceId'] = this.sourceId;  
+	} else if (this.devices !== undefined){
+	  var type = this.kindofmedia+this.inout;
+	  for (var i = 0; i < this.devices.length; i++) {
+	     if (this.devices[i].kind === type) {
+		this.req['sourceId'] = this.devices[i].sourceId;
+		break;
+	     } 
+	  }  
+	}
+	this._getUserMedia(this.req, this.success, this.error);	
     };
 UserMedia.prototype.onErrorDevices = function(e){
 	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined){
