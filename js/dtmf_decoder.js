@@ -1,7 +1,19 @@
 function UserMedia(){
-    THIS._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    this._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    THIS.getUserMedia = function(kindofmedia, inout, success, error, sourceId){
+    this.devices = undefined;
+    this._audioContext = window.AudioContext || window.webkitAudioContext;
+    this.context = undefined;
+    if(this.getUserMedia === undefined && navigator.mediaDevices !== undefined){
+	this.getUserMedia = navigator.mediaDevices.getUserMedia;
+    }
+    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
+	navigator.mediaDevices.enumerateDevices()
+	    .then(this.onSuccessDevices).catch(this.onErrorDevices);	
+    }
+}
+
+UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, sourceId){
 	req = {};
 	if (kindofmedia === 'audio') { 
 	  req['audio'] = true;
@@ -16,30 +28,29 @@ function UserMedia(){
 	}
 	if (sourceId !== undefined) {
 	  req['sourceId'] = sourceId;  
-	} else if (THIS.devices !== undefined){
+	} else if (this.devices !== undefined){
 	  var type = kindofmedia+inout;
-	  for (var i = 0; i < THIS.devices.length; i++) {
-	     if (THIS.devices[i].kind === type) {
-		req['sourceId'] = THIS.devices[i].sourceId;
+	  for (var i = 0; i < this.devices.length; i++) {
+	     if (this.devices[i].kind === type) {
+		req['sourceId'] = this.devices[i].sourceId;
 		break;
 	     } 
 	  }  
 	}
-	THIS._getUserMedia(req, success, error);
+	this._getUserMedia(req, success, error);
     };
-    THIS.devices = undefined;
-    THIS._audioContext = window.AudioContext || window.webkitAudioContext;
-    THIS.context = undefined;
-    function getAudioContext(){
-	if(THIS.context === undefined){
-	    THIS.context = new THIS._audioContext();
+
+UserMedia.prototype.getAudioContext = function(){
+	if(this.context === undefined){
+	    this.context = new this._audioContext();
 	}    
-	return THIS.context;
+	return this.context;
     };
-    THIS.onSuccessDevices = function(devs){
-	THIS.devices = devs;
+
+UserMedia.prototype.onSuccessDevices = function(devs){
+	this.devices = devs;
     };
-    THIS.onErrorDevices = function(e){
+UserMedia.prototype.onErrorDevices = function(e){
 	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined){
 	   try{
 	     navigator.MediaStreamTrack.getSources(onSuccessDevices);  
@@ -48,17 +59,9 @@ function UserMedia(){
 	 } 
 	}
     };
-    if(THIS.getUserMedia === undefined && navigator.mediaDevices !== undefined){
-	THIS.getUserMedia = navigator.mediaDevices.getUserMedia;
-    }
-    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
-	navigator.mediaDevices.enumerateDevices()
-	    .then(THIS.onSuccessDevices).catch(THIS.onErrorDevices);	
-    }
-}
-var THIS = {};
+
 var userMedia = new UserMedia();
-userMedia.THIS.getUserMedia('audio', 'input', success, alert, null);
+userMedia.getUserMedia('audio', 'input', success, alert, null);
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
