@@ -26,12 +26,12 @@
 
 <script type="text/javascript">
 var gCtx = null;
-	var gCanvas = null;
+var gCanvas = null;
 
-	var imageData = null;
-	var ii=0;
-	var jj=0;
-	var c=0;
+var imageData = null;
+var ii=0;
+var jj=0;
+var c=0;
 	
 	
 function dragenter(e) {
@@ -79,7 +79,7 @@ function load()
 {
 	initCanvas(640,480);
 	qrcode.callback = read;
-	qrcode.decode("meqrthumb.png");
+	qrcode.decode('http://www.ysymusic.com/themes/gamemusic/assets/images/qrcode1.png');
 }
 
 function initCanvas(ww,hh)
@@ -135,10 +135,10 @@ function initCanvas(ww,hh)
     <div class="container">
 	
   	<object  id="iembedflash" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="320" height="240">
-  		<param name="movie" value="camcanvas.swf" />
+  		<param name="movie"  />
   		<param name="quality" value="high" />
 		<param name="allowScriptAccess" value="always" />
-  		<embed  allowScriptAccess="always"  id="embedflash" src="camcanvas.swf" quality="high" width="320" height="240" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" mayscript="true"  />
+  		<embed  allowScriptAccess="always"  id="embedflash"  quality="high" width="320" height="240" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" mayscript="true"  />
     </object>
 	
     </div>
