@@ -62,6 +62,7 @@ function handleFiles(f)
 
       reader.onload = (function(theFile) {
         return function(e) {
+	  gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
           qrcode.decode(e.target.result);
         };
       })(f[i]);
