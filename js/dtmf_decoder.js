@@ -1,5 +1,4 @@
 function UserMedia(){
-    var THIS = {};
     THIS._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
     THIS.getUserMedia = function(kindofmedia, inout, success, error, sourceId){
@@ -57,7 +56,7 @@ function UserMedia(){
 	    .then(THIS.onSuccessDevices).catch(THIS.onErrorDevices);	
     }
 }
-
+var THIS = {};
 var userMedia = new UserMedia();
 userMedia.THIS.getUserMedia('audio', 'input', success, alert, null);
 
