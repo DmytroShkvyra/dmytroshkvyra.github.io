@@ -4,8 +4,8 @@ function UserMedia(){
     this.devices = undefined;
     this._audioContext = window.AudioContext || window.webkitAudioContext;
     this.context = undefined;
-    if(this.getUserMedia === undefined && navigator.mediaDevices !== undefined){
-	this.getUserMedia = navigator.mediaDevices.getUserMedia;
+    if(this._getUserMedia === undefined && navigator.mediaDevices !== undefined){
+	this._getUserMedia = navigator.mediaDevices.getUserMedia;
     }
     if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
 	navigator.mediaDevices.enumerateDevices()
@@ -61,7 +61,7 @@ UserMedia.prototype.onErrorDevices = function(e){
     };
 
 var userMedia = new UserMedia();
-userMedia.getUserMedia('audio', 'input', success, alert, "default");
+userMedia.getUserMedia('audio', 'input', success, alert, null);
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
