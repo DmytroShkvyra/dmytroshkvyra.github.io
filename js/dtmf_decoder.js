@@ -26,7 +26,7 @@ UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, 
 	    req['video']['facingMode'] = "environment";
           }
 	}
-	if (sourceId !== undefined) {
+	if (sourceId != null) {
 	  req['sourceId'] = sourceId;  
 	} else if (this.devices !== undefined){
 	  var type = kindofmedia+inout;
