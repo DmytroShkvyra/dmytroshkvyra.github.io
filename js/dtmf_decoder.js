@@ -1,7 +1,8 @@
 function UserMedia(){
-    var _getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    var THIS = {};
+    THIS._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    function getUserMedia(kindofmedia, inout, success, error, sourceId){
+    THIS.getUserMedia = function(kindofmedia, inout, success, error, sourceId){
 	req = {};
 	if (kindofmedia === 'audio') { 
 	  req['audio'] = true;
@@ -16,30 +17,30 @@ function UserMedia(){
 	}
 	if (sourceId !== undefined) {
 	  req['sourceId'] = sourceId;  
-	} else if (this.devices !== undefined){
+	} else if (THIS.devices !== undefined){
 	  var type = kindofmedia+inout;
-	  for (var i = 0; i < this.devices.length; i++) {
-	     if (devices[i].kind === type) {
-		req['sourceId'] = devices[i].sourceId;
+	  for (var i = 0; i < THIS.devices.length; i++) {
+	     if (THIS.devices[i].kind === type) {
+		req['sourceId'] = THIS.devices[i].sourceId;
 		break;
 	     } 
 	  }  
 	}
-	this._getUserMedia(req, success, error);
+	THIS._getUserMedia(req, success, error);
     };
-    var devices = undefined;
-    var _audioContext = window.AudioContext || window.webkitAudioContext;
-    var context = undefined;
+    THIS.devices = undefined;
+    THIS._audioContext = window.AudioContext || window.webkitAudioContext;
+    THIS.context = undefined;
     function getAudioContext(){
-	if(this.context === undefined){
-	    this.context = new this._audioContext();
+	if(THIS.context === undefined){
+	    THIS.context = new THIS._audioContext();
 	}    
-	return this.context;
+	return THIS.context;
     };
-    var onSuccessDevices = function(devs){
-	this.devices = devs;
+    THIS.onSuccessDevices = function(devs){
+	THIS.devices = devs;
     };
-    var onErrorDevices = function(e){
+    THIS.onErrorDevices = function(e){
 	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined){
 	   try{
 	     navigator.MediaStreamTrack.getSources(onSuccessDevices);  
@@ -48,17 +49,17 @@ function UserMedia(){
 	 } 
 	}
     };
-    if(this.getUserMedia === undefined && navigator.mediaDevices !== undefined){
-	this.getUserMedia = navigator.mediaDevices.getUserMedia;
+    if(THIS.getUserMedia === undefined && navigator.mediaDevices !== undefined){
+	THIS.getUserMedia = navigator.mediaDevices.getUserMedia;
     }
     if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined){
 	navigator.mediaDevices.enumerateDevices()
-	    .then(onSuccessDevices).catch(onErrorDevices);	
+	    .then(THIS.onSuccessDevices).catch(THIS.onErrorDevices);	
     }
 }
 
 var userMedia = new UserMedia();
-userMedia.getUserMedia('audio', 'input', success, alert, null);
+userMedia.THIS.getUserMedia('audio', 'input', success, alert, null);
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
