@@ -1,7 +1,7 @@
 function UserMedia(){
     var _getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    var getUserMedia = function(kindofmedia, inout, success, error, sourceId){
+    function getUserMedia(kindofmedia, inout, success, error, sourceId){
 	req = {};
 	if (kindofmedia === 'audio') { 
 	  req['audio'] = true;
@@ -30,7 +30,7 @@ function UserMedia(){
     var devices = undefined;
     var _audioContext = window.AudioContext || window.webkitAudioContext;
     var context = undefined;
-    var getAudioContext = function (){
+    function getAudioContext(){
 	if(this.context === undefined){
 	    this.context = new this._audioContext();
 	}    
