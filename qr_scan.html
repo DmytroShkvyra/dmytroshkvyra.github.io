@@ -123,6 +123,43 @@ function initCanvas(ww,hh)
 		} 
  	} 
 
+function setwebcam()
+{
+	document.getElementById("result").innerHTML="- scanning -";
+    if(stype==1)
+    {
+        setTimeout(captureToCanvas, 500);    
+        return;
+    }
+    var n=navigator;
+    document.getElementById("outdiv").innerHTML = vidhtml;
+    v=document.getElementById("v");
+
+    if(n.getUserMedia)
+        n.getUserMedia({video: true, audio: false}, success, error);
+    else
+    if(n.mediaDevices.getUserMedia)
+        n.mediaDevices.getUserMedia({video: { facingMode: "environment"} , audio: false})
+            .then(success)
+            .catch(error);
+    else
+    if(n.webkitGetUserMedia)
+    {
+        webkit=true;
+        n.webkitGetUserMedia({video:true, audio: false}, success, error);
+    }
+    else
+    if(n.mozGetUserMedia)
+    {
+        moz=true;
+        n.mozGetUserMedia({video: true, audio: false}, success, error);
+    }
+
+    setTimeout(captureToCanvas, 500);
+}
+
+
+
         function captureToCanvas() {
 		flash = document.getElementById("embedflash");
 		flash.ccCapture();
