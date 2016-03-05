@@ -26,7 +26,7 @@ UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, 
 	    req['video']['facingMode'] = "environment";
           }
 	}
-	if (sourceId != null) {
+	if (sourceId !== null) {
 	  req['sourceId'] = sourceId;  
 	} else if (this.devices !== undefined){
 	  var type = kindofmedia+inout;
@@ -61,7 +61,7 @@ UserMedia.prototype.onErrorDevices = function(e){
     };
 
 var userMedia = new UserMedia();
-userMedia.getUserMedia('audio', 'input', success, alert, null);
+userMedia.getUserMedia('audio', 'input', success, alert, "default");
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
