@@ -9,13 +9,13 @@ function success(e) {
     volume = context.createGain();
     audioInput = context.createMediaStreamSource(e);
     audioInput.connect(volume);
-    var bufferSize = 1024;
+    var bufferSize = 512;
     recorder = context.createScriptProcessor(bufferSize, 1, 1);
     var outputElement = document.querySelector('#output');
     var dtmf = new DTMF({
 	sampleRate: context.sampleRate,
 	peakFilterSensitivity: 1.4,
-	repeatMin: 7,
+	repeatMin: 6,
 	downsampleRate: 1,
 	threshold: 0.005
     });
