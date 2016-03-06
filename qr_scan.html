@@ -80,7 +80,7 @@ function load()
 {
 	initCanvas(640,480);
 	qrcode.callback = read;
-	qrcode.decode('qrcode1.png');
+	//qrcode.decode('qrcode1.png');
 	setTimeout(setwebcam(), 500);
 }
 
@@ -130,6 +130,7 @@ var userMedia = new UserMedia();
 userMedia.getUserMedia('video', 'input', success, alert, undefined);
     function success(stream) {
 	v.src = window.URL.createObjectURL(stream);
+	gCtx.drawImage(v,0,0);
 	setTimeout(captureToCanvas, 500);
     }
 v=document.getElementById("v");
