@@ -1,5 +1,5 @@
 function UserMedia() {
-    this._getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	    navigator.mozGetUserMedia || navigator.msGetUserMedia;
     this.devices = undefined;
     this._audioContext = window.AudioContext || window.webkitAudioContext;
@@ -30,7 +30,7 @@ function UserMedia() {
 	    navigator.mediaDevices.enumerateDevices()
 		    .then(this.onSuccessDevices).catch(this.onErrorDevices);
 	} else {
-	    this._getUserMedia(this.req, this.success, this.error);
+	    navigator.getUserMedia(this.req, this.success, this.error);
 	}
     };
 
@@ -54,7 +54,7 @@ function UserMedia() {
 		}
 	    }
 	}
-	UserMedia.prototype.this._getUserMedia(UserMedia.prototype.this.req, UserMedia.prototype.this.success, UserMedia.prototype.this.error);
+	navigator.getUserMedia(UserMedia.prototype.this.req, UserMedia.prototype.this.success, UserMedia.prototype.this.error);
     };
     UserMedia.prototype.onErrorDevices = function(e) {
 	var  err1;
@@ -69,8 +69,8 @@ function UserMedia() {
 	}
 	alert("This browser doesn't support work with media devices. Errors:\n" + e);
     };
-    if (UserMedia.prototype.this._getUserMedia === undefined && navigator.mediaDevices !== undefined) {
-	UserMedia.prototype.this._getUserMedia = navigator.mediaDevices.getUserMedia;
+    if (navigator.getUserMedia === undefined && navigator.mediaDevices !== undefined) {
+	navigator.getUserMedia = navigator.mediaDevices.getUserMedia;
     }
 }
 
