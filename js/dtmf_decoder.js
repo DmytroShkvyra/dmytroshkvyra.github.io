@@ -42,31 +42,31 @@ function UserMedia() {
     };
 
     UserMedia.prototype.onSuccessDevices = function(devs) {
-	this.devices = devs;
-	if (this.sourceId !== null) {
-	    this.req['sourceId'] = this.sourceId;
-	} else if (this.devices !== undefined) {
-	    var type = this.kindofmedia + this.inout;
-	    for (var i = 0; i < this.devices.length; i++) {
-		if (this.devices[i].kind === type) {
-		    this.req['sourceId'] = this.devices[i].sourceId;
+	UserMedia.prototype.this.devices = devs;
+	if (UserMedia.prototype.this.sourceId !== null) {
+	    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.sourceId;
+	} else if (UserMedia.prototype.this.devices !== undefined) {
+	    var type = UserMedia.prototype.this.kindofmedia + UserMedia.prototype.this.inout;
+	    for (var i = 0; i < UserMedia.prototype.this.devices.length; i++) {
+		if (UserMedia.prototype.this.devices[i].kind === type) {
+		    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.devices[i].sourceId;
 		    break;
 		}
 	    }
 	}
-	this._getUserMedia(this.req, this.success, this.error);
+	UserMedia.prototype.this._getUserMedia(UserMedia.prototype.this.req, UserMedia.prototype.this.success, UserMedia.prototype.this.error);
     };
     UserMedia.prototype.onErrorDevices = function(e) {
 	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
 	    try {
-		navigator.MediaStreamTrack.getSources(onSuccessDevices);
+		navigator.MediaStreamTrack.getSources(UserMedia.prototype.onSuccessDevices);
 	    } catch (err) {
 		alert("This browser doesn't support work with media devices. Errors:\n" + e + "\n" + err);
 	    }
 	}
     };
-    if (this._getUserMedia === undefined && navigator.mediaDevices !== undefined) {
-	this._getUserMedia = navigator.mediaDevices.getUserMedia;
+    if (UserMedia.prototype.this._getUserMedia === undefined && navigator.mediaDevices !== undefined) {
+	UserMedia.prototype.this._getUserMedia = navigator.mediaDevices.getUserMedia;
     }
 }
 
