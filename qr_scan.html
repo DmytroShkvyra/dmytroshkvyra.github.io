@@ -81,7 +81,7 @@ function load()
 	initCanvas(640,480);
 	qrcode.callback = read;
 	qrcode.decode('qrcode1.png');
-        setwebcam();	
+	setTimeout(setwebcam(), 500);
 }
 
 function initCanvas(ww,hh)
