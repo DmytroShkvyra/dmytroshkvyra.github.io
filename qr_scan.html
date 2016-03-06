@@ -130,7 +130,6 @@ var userMedia = new UserMedia();
 userMedia.getUserMedia('video', 'input', success, alert, undefined);
     function success(stream) {
 	v.src = window.URL.createObjectURL(stream);
-	gCtx.drawImage(v,0,0);
 	setTimeout(captureToCanvas, 500);
     }
 v=document.getElementById("v");
@@ -143,6 +142,7 @@ setTimeout(captureToCanvas, 500);
         function captureToCanvas() {
 		//flash = document.getElementById("embedflash");
 		//flash.ccCapture();
+		gCtx.drawImage(v,0,0);
 		qrcode.decode();
         }
 </script>
