@@ -8,67 +8,68 @@ function UserMedia() {
     this.kindofmedia = undefined;
     this.inout = undefined;
     this.req = {};
+    UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, sourceId) {
+	this.success = success;
+	this.error = error;
+	if (kindofmedia === 'audio') {
+	    this.req['audio'] = true;
+	    this.req['video'] = false;
+	} else if (kindofmedia === 'video') {
+	    this.req['video'] = true;
+	    this.req['audio'] = false;
+	    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined) {
+		this.req['video'] = {};
+		this.req['video']['facingMode'] = "environment";
+	    }
+	}
+	this.sourceId = sourceId;
+	this.inout = inout;
+	this.kindofmedia = kindofmedia;
+	if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
+	    navigator.mediaDevices.enumerateDevices()
+		    .then(this.onSuccessDevices).catch(this.onErrorDevices);
+	} else {
+	    this._getUserMedia(this.req, this.success, this.error);
+	}
+    };
+
+    UserMedia.prototype.getAudioContext = function() {
+	if (this.context === undefined) {
+	    this.context = new this._audioContext();
+	}
+	return this.context;
+    };
+
+    UserMedia.prototype.onSuccessDevices = function(devs) {
+	this.devices = devs;
+	if (this.sourceId !== null) {
+	    this.req['sourceId'] = this.sourceId;
+	} else if (this.devices !== undefined) {
+	    var type = this.kindofmedia + this.inout;
+	    for (var i = 0; i < this.devices.length; i++) {
+		if (this.devices[i].kind === type) {
+		    this.req['sourceId'] = this.devices[i].sourceId;
+		    break;
+		}
+	    }
+	}
+	this._getUserMedia(this.req, this.success, this.error);
+    };
+    UserMedia.prototype.onErrorDevices = function(e) {
+	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
+	    try {
+		navigator.MediaStreamTrack.getSources(onSuccessDevices);
+	    } catch (err) {
+		alert("This browser doesn't support work with media devices. Errors:\n" + e + "\n" + err);
+	    }
+	}
+    };
     if (this._getUserMedia === undefined && navigator.mediaDevices !== undefined) {
 	this._getUserMedia = navigator.mediaDevices.getUserMedia;
     }
 }
 
-UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, sourceId) {
-    this.success = success;
-    this.error = error;
-    if (kindofmedia === 'audio') {
-	this.req['audio'] = true;
-	this.req['video'] = false;
-    } else if (kindofmedia === 'video') {
-	this.req['video'] = true;
-	this.req['audio'] = false;
-	if (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined) {
-	    this.req['video'] = {};
-	    this.req['video']['facingMode'] = "environment";
-	}
-    }
-    this.sourceId = sourceId;
-    this.inout = inout;
-    this.kindofmedia = kindofmedia;
-    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
-	navigator.mediaDevices.enumerateDevices()
-		.then(this.onSuccessDevices).catch(this.onErrorDevices);
-    } else {
-	this._getUserMedia(this.req, this.success, this.error);
-    }
-};
 
-UserMedia.prototype.getAudioContext = function() {
-    if (this.context === undefined) {
-	this.context = new this._audioContext();
-    }
-    return this.context;
-};
-
-UserMedia.prototype.onSuccessDevices = function(devs) {
-    this.devices = devs;
-    if (this.sourceId !== null) {
-	this.req['sourceId'] = this.sourceId;
-    } else if (this.devices !== undefined) {
-	var type = this.kindofmedia + this.inout;
-	for (var i = 0; i < this.devices.length; i++) {
-	    if (this.devices[i].kind === type) {
-		this.req['sourceId'] = this.devices[i].sourceId;
-		break;
-	    }
-	}
-    }
-    this._getUserMedia(this.req, this.success, this.error);
-};
-UserMedia.prototype.onErrorDevices = function(e) {
-    if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
-	try {
-	    navigator.MediaStreamTrack.getSources(onSuccessDevices);
-	} catch (err) {
-	    alert("This browser doesn't support work with media devices. Errors:\n" + e + "\n" + err);
-	}
-    }
-};
 
 var userMedia = new UserMedia();
 userMedia.getUserMedia('audio', 'input', success, alert, null);
