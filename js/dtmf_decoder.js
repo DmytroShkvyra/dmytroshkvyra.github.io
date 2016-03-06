@@ -18,7 +18,7 @@ function UserMedia() {
 	} else if (kindofmedia === 'video') {
 	    this.req['video'] = true;
 	    this.req['audio'] = false;
-	    if (navigator.mediaDevices !== 'undefined' && navigator.mediaDevices.getUserMedia !== 'undefined') {
+	    if (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined) {
 		this.req['video'] = {};
 		this.req['video']['facingMode'] = "environment";
 	    }
@@ -26,7 +26,7 @@ function UserMedia() {
 	this.sourceId = sourceId;
 	this.inout = inout;
 	this.kindofmedia = kindofmedia;
-	if (navigator.mediaDevices !== 'undefined' && navigator.mediaDevices.enumerateDevices !== 'undefined') {
+	if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
 	    navigator.mediaDevices.enumerateDevices()
 		    .then(this.onSuccessDevices).catch(this.onErrorDevices);
 	} else {
@@ -35,7 +35,7 @@ function UserMedia() {
     };
 
     UserMedia.prototype.getAudioContext = function() {
-	if (this.context === 'undefined') {
+	if (this.context === undefined) {
 	    this.context = new this._audioContext();
 	}
 	return this.context;
@@ -43,9 +43,9 @@ function UserMedia() {
 
     UserMedia.prototype.onSuccessDevices = function(devs) {
 	UserMedia.prototype.this.devices = devs;
-	if (UserMedia.prototype.this.sourceId !== 'undefined') {
+	if (UserMedia.prototype.this.sourceId !== undefined) {
 	    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.sourceId;
-	} else if (UserMedia.prototype.this.devices !== 'undefined') {
+	} else if (UserMedia.prototype.this.devices !== undefined) {
 	    var type = UserMedia.prototype.this.kindofmedia + UserMedia.prototype.this.inout;
 	    for (var i = 0; i < UserMedia.prototype.this.devices.length; i++) {
 		if (UserMedia.prototype.this.devices[i].kind === type) {
