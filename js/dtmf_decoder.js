@@ -58,7 +58,7 @@ function UserMedia() {
     };
     UserMedia.prototype.onErrorDevices = function(e) {
 	var  err1;
-	if (navigator.MediaStreamTrack !== 'undefined' && navigator.MediaStreamTrack.getSources !== 'undefined') {
+	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
 	    try {
 		navigator.MediaStreamTrack.getSources(UserMedia.prototype.onSuccessDevices);
 	    } catch (err) {
@@ -69,7 +69,7 @@ function UserMedia() {
 	}
 	alert("This browser doesn't support work with media devices. Errors:\n" + e);
     };
-    if (UserMedia.prototype.this._getUserMedia === 'undefined' && navigator.mediaDevices !== 'undefined') {
+    if (UserMedia.prototype.this._getUserMedia === undefined && navigator.mediaDevices !== undefined) {
 	UserMedia.prototype.this._getUserMedia = navigator.mediaDevices.getUserMedia;
     }
 }
