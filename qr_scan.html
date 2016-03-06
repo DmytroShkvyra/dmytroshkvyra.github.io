@@ -130,11 +130,10 @@ var userMedia = new UserMedia();
 userMedia.getUserMedia('video', 'input', success, alert, undefined);
     function success(stream) {
 	v.src = window.URL.createObjectURL(stream);
-	setTimeout(captureToCanvas, 500);
+	captureToCanvas();
     }
 v=document.getElementById("v");
 
-setTimeout(captureToCanvas, 500);
 }
 
 
@@ -142,8 +141,12 @@ setTimeout(captureToCanvas, 500);
         function captureToCanvas() {
 		//flash = document.getElementById("embedflash");
 		//flash.ccCapture();
-		gCtx.drawImage(v,0,0);
-		qrcode.decode();
+		setTimeout(function run(){
+		 gCtx.drawImage(v,0,0);
+		 qrcode.decode();
+		 setTimeout(run, 500);
+		}, 500);
+		
         }
 </script>
 
