@@ -14,8 +14,8 @@ function success(e) {
     var outputElement = document.querySelector('#output');
     var dtmf = new DTMF({
 	sampleRate: context.sampleRate,
-	peakFilterSensitivity: 1.0,
-	repeatMin: 3,
+	peakFilterSensitivity: 1.4,
+	repeatMin: 10,
 	downsampleRate: 1,
 	threshold: 0.005
     });
