@@ -4,7 +4,7 @@ function UserMedia() {
     this.devices = undefined;
     this._audioContext = window.AudioContext || window.webkitAudioContext;
     this.context = undefined;
-    this.sourceId = 'default';
+    this.deviceId = 'default';
     this.kindofmedia = undefined;
     this.inout = undefined;   
     this.req = {};
@@ -23,7 +23,7 @@ function UserMedia() {
 		this.req['video']['facingMode'] = "environment";
 	    }
 	}
-	this.sourceId = sourceId;
+	this.deviceId = sourceId;
 	this.inout = inout;
 	this.kindofmedia = kindofmedia;
 	if (navigator.mediaDevices !== undefined && navigator.mediaDevices.enumerateDevices !== undefined) {
@@ -43,13 +43,13 @@ function UserMedia() {
 
     UserMedia.prototype.onSuccessDevices = function(devs) {
 	UserMedia.prototype.this.devices = devs;
-	if (UserMedia.prototype.this.sourceId !== undefined) {
-	    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.sourceId;
+	if (UserMedia.prototype.this.deviceId !== undefined) {
+	    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.deviceId;
 	} else if (UserMedia.prototype.this.devices !== undefined) {
 	    var type = UserMedia.prototype.this.kindofmedia + UserMedia.prototype.this.inout;
 	    for (var i = 0; i < UserMedia.prototype.this.devices.length; i++) {
 		if (UserMedia.prototype.this.devices[i].kind === type) {
-		    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.devices[i].sourceId;
+		    UserMedia.prototype.this.req.deviceId = UserMedia.prototype.this.devices[i].deviceId;
 		    break;
 		}
 	    }
