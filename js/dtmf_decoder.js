@@ -43,7 +43,7 @@ function UserMedia() {
 
     UserMedia.prototype.onSuccessDevices = function(devs) {
 	UserMedia.prototype.this.devices = devs;
-	if (UserMedia.prototype.this.sourceId !== null) {
+	if (UserMedia.prototype.this.sourceId !== undefined) {
 	    UserMedia.prototype.this.req['sourceId'] = UserMedia.prototype.this.sourceId;
 	} else if (UserMedia.prototype.this.devices !== undefined) {
 	    var type = UserMedia.prototype.this.kindofmedia + UserMedia.prototype.this.inout;
