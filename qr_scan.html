@@ -81,6 +81,7 @@ function load()
 	initCanvas(640,480);
 	qrcode.callback = read;
 	qrcode.decode('qrcode1.png');
+        setwebcam();	
 }
 
 function initCanvas(ww,hh)
@@ -150,7 +151,7 @@ setTimeout(captureToCanvas, 500);
 <body onload="load()">
     <div class="container">
 	
-	<div id="v"/>
+	<video autoplay id="v"/>
 	
     </div>
 <button onclick="captureToCanvas()">Capture</button><br>
