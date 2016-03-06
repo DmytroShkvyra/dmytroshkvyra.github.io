@@ -15,7 +15,7 @@ function success(e) {
     var dtmf = new DTMF({
 	sampleRate: context.sampleRate,
 	peakFilterSensitivity: 1.4,
-	repeatMin: 10,
+	repeatMin: 7,
 	downsampleRate: 1,
 	threshold: 0.005
     });
