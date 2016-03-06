@@ -6,8 +6,9 @@ function UserMedia() {
     this.context = undefined;
     this.sourceId = 'default';
     this.kindofmedia = undefined;
-    this.inout = undefined;
+    this.inout = undefined;   
     this.req = {};
+    UserMedia.prototype.this = this;
     UserMedia.prototype.getUserMedia = function(kindofmedia, inout, success, error, sourceId) {
 	this.success = success;
 	this.error = error;
@@ -72,7 +73,7 @@ function UserMedia() {
 
 
 var userMedia = new UserMedia();
-userMedia.getUserMedia('audio', 'input', success, alert, null);
+userMedia.getUserMedia('audio', 'input', success, alert, 'default');
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
