@@ -57,11 +57,14 @@ function UserMedia() {
 	UserMedia.prototype.this._getUserMedia(UserMedia.prototype.this.req, UserMedia.prototype.this.success, UserMedia.prototype.this.error);
     };
     UserMedia.prototype.onErrorDevices = function(e) {
+	var  err1;
 	if (navigator.MediaStreamTrack !== undefined && navigator.MediaStreamTrack.getSources !== undefined) {
 	    try {
 		navigator.MediaStreamTrack.getSources(UserMedia.prototype.onSuccessDevices);
 	    } catch (err) {
-		alert("This browser doesn't support work with media devices. Errors:\n" + e + "\n" + err);
+		err1 = err;
+	    } finally {
+		alert("This browser doesn't support work with media devices. Errors:\n" + e + "\n" + err1);
 	    }
 	}
     };
@@ -73,7 +76,7 @@ function UserMedia() {
 
 
 var userMedia = new UserMedia();
-userMedia.getUserMedia('audio', 'input', success, alert, 'default');
+userMedia.getUserMedia('audio', 'input', success, alert, undefined);
 
 //if (navigator.getUserMedia === undefined) {
 //    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
