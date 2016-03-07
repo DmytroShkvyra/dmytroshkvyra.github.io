@@ -113,6 +113,8 @@ and open the template in the editor.
   
   var canvas = document.getElementById("canvas");
   var canvasContext = canvas.getContext("2d");
+  
+  var analyser;
 
   var frequencyBars = 100;
   // Array containing all the frequencies we want to get
@@ -134,6 +136,9 @@ and open the template in the editor.
     biquadFilter.frequency.value = 1000;
     biquadFilter.Q.value = 10;
     biquadFilter.gain.value = 20;
+    
+    analyser = audioContext.createAnalyser();
+
 
   window.addEventListener("load", function(e) {
     audio = document.getElementById("theSong");   
@@ -148,10 +153,33 @@ and open the template in the editor.
     biquadFilter.gain.value = 20;
 
     source.connect(biquadFilter);
-    biquadFilter.connect(audioContext.destination);
+    biquadFilter.connect(analyser);
+    
+    analyser.fftSize = 32;
+    analyser.connect(audioContext.destination);
+    
+    frequencyData = new Uint8Array(analyser.frequencyBinCount);
+//    audio.pause();
+//    audio.play();
+    renderFrame();    
 
     updateFrequencyResponse();
   }, false);
+
+function renderFrame() {
+    analyser.getByteFrequencyData(frequencyData);
+    P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
+    P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
+    P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
+    P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
+    P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
+    P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
+    P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
+    P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
+    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
+    console.log(frequencyData);
+    requestAnimationFrame(renderFrame);
+}
 
   function drawFrequencyResponse(mag, phase) {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -234,7 +262,17 @@ and open the template in the editor.
     </head>
     <body onload="onloadBody();">
 <div class="top-container">
-
+	<div id="bar">
+	    <div id="P10" class="p"></div>
+	    <div id="P20" class="p"></div>
+	    <div id="P30" class="p"></div>
+	    <div id="P40" class="p"></div>
+	    <div id="P50" class="p"></div>
+	    <div id="P60" class="p"></div>
+	    <div id="P70" class="p"></div>
+	    <div id="P80" class="p"></div>
+	    <div id="P90" class="p"></div>
+	</div>
 </div>
 
 <div id="controls">
