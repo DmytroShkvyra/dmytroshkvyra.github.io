@@ -56,229 +56,221 @@ and open the template in the editor.
 	    }
 	</style>
 	<script>
-	 function onload(){   
-	    /*
-	     Read my blog post about Web Audio API:
-	     http://codepen.io/DonKarlssonSan/blog/fun-with-web-audio-api
-	     
-	     Browser support for Web Audio API:
-	     http://caniuse.com/#feat=audio-api
-	     */
-	    var userMedia = new UserMedia();
-	    var source;
+/*
+  Read my blog post about Web Audio API:
+  http://codepen.io/DonKarlssonSan/blog/fun-with-web-audio-api
 
+  Browser support for Web Audio API:
+  http://caniuse.com/#feat=audio-api
+*/
+(function() {
+  var AudioContext = window.AudioContext ||
+      window.webkitAudioContext;
+  var audioContext;
+  var biquadFilter;
+  
+  var frequencySlider = document.getElementById("frequencySlider");
+  var qSlider = document.getElementById("qSlider");
+  var gainSlider = document.getElementById("gainSlider");
+  
+  var audio;
+  
+  // All Web Audio API filters
+  // https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
+  // q and gain controls if the corresponding slider
+  // should be enabled
+  var filters = { "lowpass": {
+      q: true,
+      gain: false
+    }, "highpass": {
+      q: true,
+      gain: false 
+    }, "bandpass": {
+      q: true,
+      gain: false 
+    }, "lowshelf": { 
+      q: false,
+      gain: true 
+    }, "highshelf": { 
+      q: false,
+      gain: true 
+    }, "peaking": { 
+      q: true,
+      gain: true 
+    }, "notch": { 
+      q: true,
+      gain: false 
+    }, "allpass": { 
+      q: true,
+      gain: false 
+    } 
+  };
+  
+  var canvas = document.getElementById("canvas");
+  var canvasContext = canvas.getContext("2d");
 
-	    (function() {
-		var AudioContext = window.AudioContext ||
-			window.webkitAudioContext;
-		var audioContext;
-		var biquadFilter;
+  var frequencyBars = 100;
+  // Array containing all the frequencies we want to get
+  // response for when calling getFrequencyResponse()
+  var myFrequencyArray = new Float32Array(frequencyBars);
+  for(var i = 0; i < frequencyBars; ++i) {
+    myFrequencyArray[i] = 2000/frequencyBars*(i+1);
+  }
+  
+  // We receive the result in these two when calling
+  // getFrequencyResponse()
+  var magResponseOutput = new Float32Array(frequencyBars); // magnitude
+  var phaseResponseOutput = new Float32Array(frequencyBars);  
+  
+  audioContext = new AudioContext();
 
-		var frequencySlider = document.getElementById("frequencySlider");
-		var qSlider = document.getElementById("qSlider");
-		var gainSlider = document.getElementById("gainSlider");
+  window.addEventListener("load", function(e) {
+    audio = document.getElementById("theSong");   
+    audio.crossOrigin = "anonymous";
 
+    var source = audioContext.createMediaElementSource(audio);
+    
+    biquadFilter = audioContext.createBiquadFilter();
+    biquadFilter.type = "lowpass";
+    biquadFilter.frequency.value = 1000;
+    biquadFilter.Q.value = 10;
+    biquadFilter.gain.value = 20;
 
-		// All Web Audio API filters
-		// https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
-		// q and gain controls if the corresponding slider
-		// should be enabled
-		var filters = {"lowpass": {
-			q: true,
-			gain: false
-		    }, "highpass": {
-			q: true,
-			gain: false
-		    }, "bandpass": {
-			q: true,
-			gain: false
-		    }, "lowshelf": {
-			q: false,
-			gain: true
-		    }, "highshelf": {
-			q: false,
-			gain: true
-		    }, "peaking": {
-			q: true,
-			gain: true
-		    }, "notch": {
-			q: true,
-			gain: false
-		    }, "allpass": {
-			q: true,
-			gain: false
-		    }
-		};
+    source.connect(biquadFilter);
+    biquadFilter.connect(audioContext.destination);
 
-		var canvas = document.getElementById("canvas");
-		var canvasContext = canvas.getContext("2d");
+    updateFrequencyResponse();
+  }, false);
 
-		var frequencyBars = 100;
-		// Array containing all the frequencies we want to get
-		// response for when calling getFrequencyResponse()
-		var myFrequencyArray = new Float32Array(frequencyBars);
-		for (var i = 0; i < frequencyBars; ++i) {
-		    myFrequencyArray[i] = 2000 / frequencyBars * (i + 1);
-		}
+  function drawFrequencyResponse(mag, phase) {
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    var barWidth = 400 / frequencyBars;
+    
+    // Magnitude
+    canvasContext.strokeStyle = "white";
+    canvasContext.beginPath();
+    for(var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+      canvasContext.lineTo(
+        frequencyStep * barWidth, 
+        canvas.height - mag[frequencyStep]*90);
+    }
+    canvasContext.stroke();
+    
+    // Phase
+    canvasContext.strokeStyle = "red";
+    canvasContext.beginPath();
+    for(var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+      canvasContext.lineTo(
+        frequencyStep * barWidth, 
+        canvas.height - (phase[frequencyStep]*90 + 300)/Math.PI);
+    }
+    canvasContext.stroke();
+  } 
+  
+  function updateFrequencyResponse() {
+    biquadFilter.getFrequencyResponse(
+      myFrequencyArray, 
+      magResponseOutput,
+      phaseResponseOutput);
+    drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
+  }
 
-		// We receive the result in these two when calling
-		// getFrequencyResponse()
-		var magResponseOutput = new Float32Array(frequencyBars); // magnitude
-		var phaseResponseOutput = new Float32Array(frequencyBars);
+  
+  frequencySlider.addEventListener("change", function () {
+    biquadFilter.frequency.value = this.value; 
+  });
+  
+  frequencySlider.addEventListener("mousemove", function () {
+    biquadFilter.frequency.value = this.value;
+    updateFrequencyResponse();
+  });
 
-		audioContext = new AudioContext();
+  qSlider.addEventListener("mousemove", function () {
+    biquadFilter.Q.value = this.value; 
+    updateFrequencyResponse();
+  });
 
-		window.addEventListener("load", function(e) {
+  gainSlider.addEventListener("mousemove", function () {
+    biquadFilter.gain.value = this.value;
+    updateFrequencyResponse();
+  });
+  
+  var filtersDropdown = document.getElementById("filtersDropdown");    
 
-		    userMedia.getUserMedia('audio', 'input', createSource, alert, undefined);
+  for(var item in filters) {
+    var option = document.createElement("option");
+    option.innerHTML = item;
+    // This will cause a re-flow of the page but we don't care
+    filtersDropdown.appendChild(option);
+  };
 
-		    function createSource(stream) {
-			source = audioCtx.createMediaStreamSource(stream);
-		    biquadFilter = audioContext.createBiquadFilter();
-		    biquadFilter.type = "lowpass";
-		    biquadFilter.frequency.value = 1000;
-		    biquadFilter.Q.value = 10;
-		    biquadFilter.gain.value = 20;	
-		    source.connect(biquadFilter);
-		    analyser = audioContext.createAnalyser();
-		    analyser.fftSize = frequencyBars;
-		    biquadFilter.connect(analyser);
+  function filterClicked (event) {
+    event = event || window.event;
+    var target = event.target || event.srcElement;
+    var filterName = target.value;
+    biquadFilter.type = filterName;
+    updateFrequencyResponse();
+    qSlider.disabled = !filters[filterName].q;
+    gainSlider.disabled = !filters[filterName].gain;
+  };
+  filtersDropdown.addEventListener("change", filterClicked, false);
 
+  ////////////////////////////
+  // Soundcloud stuff below //
+  ////////////////////////////
+  
+  function get(url, callback) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() { 
+      if (request.readyState === 4 && request.status === 200) {
+        callback(request.responseText);
+      }
+    }
 
-		    //biquadFilter.connect(audioContext.destination);
-		    frequencyData = new Uint8Array(analyser.frequencyBinCount);
-		    renderFrame();
-		    updateFrequencyResponse();			
-		    }
+    request.open("GET", url, true);            
+    request.send(null);
+  }
 
+  var clientParameter = "client_id=3b2585ef4a5eff04935abe84aad5f3f3"
 
-		}, false);
+  var trackPermalinkUrl = 
+      "https://soundcloud.com/aviciiofficial/avicii-levels-original-mix";
 
-		function drawFrequencyResponse(mag, phase) {
-		    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-		    var barWidth = 400 / frequencyBars;
+  function findTrack() {
+    get("http://api.soundcloud.com/resolve.json?url=" + trackPermalinkUrl + "&" + clientParameter,
+      function (response) {
+        var trackInfo = JSON.parse(response);
+        audio.src = trackInfo.stream_url + "?" + clientParameter;
+      }
+    );
+  };
+  
+  findTrack();
+  
+})();
 
-		    // Magnitude
-		    canvasContext.strokeStyle = "white";
-		    canvasContext.beginPath();
-		    for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
-			canvasContext.lineTo(
-				frequencyStep * barWidth,
-				canvas.height - mag[frequencyStep] * 90);
-		    }
-		    canvasContext.stroke();
-
-		    // Phase
-		    canvasContext.strokeStyle = "red";
-		    canvasContext.beginPath();
-		    for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
-			canvasContext.lineTo(
-				frequencyStep * barWidth,
-				canvas.height - (phase[frequencyStep] * 90 + 300) / Math.PI);
-		    }
-		    canvasContext.stroke();
-		}
-
-		function renderFrame() {
-		    analyser.getByteFrequencyData(frequencyData);
-		    P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
-		    P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-		    P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
-		    P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
-		    P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
-		    P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
-		    P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
-		    P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-		    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-		    //P10.value= 'Hz';
-		    console.log(frequencyData);
-		    requestAnimationFrame(renderFrame);
-		}
-
-		function updateFrequencyResponse() {
-		    biquadFilter.getFrequencyResponse(
-			    myFrequencyArray,
-			    magResponseOutput,
-			    phaseResponseOutput);
-		    drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
-		}
-
-
-		frequencySlider.addEventListener("change", function() {
-		    biquadFilter.frequency.value = this.value;
-		});
-
-		frequencySlider.addEventListener("mousemove", function() {
-		    biquadFilter.frequency.value = this.value;
-		    updateFrequencyResponse();
-		});
-
-		qSlider.addEventListener("mousemove", function() {
-		    biquadFilter.Q.value = this.value;
-		    updateFrequencyResponse();
-		});
-
-		gainSlider.addEventListener("mousemove", function() {
-		    biquadFilter.gain.value = this.value;
-		    updateFrequencyResponse();
-		});
-
-		var filtersDropdown = document.getElementById("filtersDropdown");
-
-		for (var item in filters) {
-		    var option = document.createElement("option");
-		    option.innerHTML = item;
-		    // This will cause a re-flow of the page but we don't care
-		    filtersDropdown.appendChild(option);
-		}
-		;
-
-		function filterClicked(event) {
-		    event = event || window.event;
-		    var target = event.target || event.srcElement;
-		    var filterName = target.value;
-		    biquadFilter.type = filterName;
-		    updateFrequencyResponse();
-		    qSlider.disabled = !filters[filterName].q;
-		    gainSlider.disabled = !filters[filterName].gain;
-		}
-		;
-		filtersDropdown.addEventListener("change", filterClicked, false);
-
-	    })();
-	}
 	</script>	
 
     </head>
-    <body onload="onload()">
-	<div id="bar">
-	    <div id="P10" class="p"></div>
-	    <div id="P20" class="p"></div>
-	    <div id="P30" class="p"></div>
-	    <div id="P40" class="p"></div>
-	    <div id="P50" class="p"></div>
-	    <div id="P60" class="p"></div>
-	    <div id="P70" class="p"></div>
-	    <div id="P80" class="p"></div>
-	    <div id="P90" class="p"></div>
-	</div>
-	<div class="top-container">
-	    <h1>Apply filter effects to music!</h1>
-	    <h2>Draw the sliders and hear how it effects the sound. <br>But be careful with the volume, don't damage your<br> hearing/headphones/speakers!</h2>
+    <body>
+<img src="https://developers.soundcloud.com/assets/powered_by_large_white-de881ecad8561c2131e7676fa9e92738.png" class="float"></img>
+<div class="top-container">
+  <h1>Apply filter effects to music!</h1>
+  <h2>Draw the sliders and hear how it effects the sound. <br>But be careful with the volume, don't damage your<br> hearing/headphones/speakers!</h2>
+  <audio id="theSong" controls />
+</div>
 
-	</div>
-
-	<div id="controls">
-	    <p>
-		<select id="filtersDropdown">
-		</select>
-	    </p>
-	    <canvas id="canvas" width="400" height ="200"></canvas>
-	    <p>
-		<input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
-		<input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
-		<input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />
-	    </p>
-	</div>
+<div id="controls">
+  <p>
+    <select id="filtersDropdown">
+    </select>
+  </p>
+  <canvas id="canvas" width="400" height ="200"></canvas>
+  <p>
+    <input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
+    <input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
+    <input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />
+  </p>
+</div>
     </body>
 </html>
