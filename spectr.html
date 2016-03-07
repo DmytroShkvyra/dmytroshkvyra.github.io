@@ -123,6 +123,12 @@ and open the template in the editor.
   var phaseResponseOutput = new Float32Array(frequencyBars);  
   
   audioContext = new AudioContext();
+  
+    biquadFilter = audioContext.createBiquadFilter();
+    biquadFilter.type = "lowpass";
+    biquadFilter.frequency.value = 1000;
+    biquadFilter.Q.value = 10;
+    biquadFilter.gain.value = 20;
 
   window.addEventListener("load", function(e) {
     audio = document.getElementById("theSong");   
