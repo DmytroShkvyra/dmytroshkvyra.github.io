@@ -56,6 +56,7 @@ and open the template in the editor.
 	    }
 	</style>
 	<script>
+	 function onload(){   
 	    /*
 	     Read my blog post about Web Audio API:
 	     http://codepen.io/DonKarlssonSan/blog/fun-with-web-audio-api
@@ -246,10 +247,11 @@ and open the template in the editor.
 		filtersDropdown.addEventListener("change", filterClicked, false);
 
 	    })();
+	}
 	</script>	
 
     </head>
-    <body>
+    <body onload="onload()">
 	<div id="bar">
 	    <div id="P10" class="p"></div>
 	    <div id="P20" class="p"></div>
