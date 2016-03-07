@@ -65,7 +65,7 @@ and open the template in the editor.
 	     */
 	    var userMedia = new UserMedia();
 	    var source;
-	    userMedia.getUserMedia('audio', 'input', startAnaliz, alert, undefined);
+	    userMedia.getUserMedia('audio', 'input', createSource, alert, undefined);
 
 	    function createSource(stream) {
 		source = audioCtx.createMediaStreamSource(stream);
