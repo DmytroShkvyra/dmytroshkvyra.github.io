@@ -55,12 +55,21 @@ and open the template in the editor.
 var userMedia = new UserMedia();
 var frequencyData;
 var analyser;
+var biquadFilter;
 
 function startAnaliz(stream){
     audioCtx = new AudioContext();
+    
+  biquadFilter = audioContext.createBiquadFilter();
+  biquadFilter.type = "lowpass";
+  biquadFilter.frequency.value = 1000;
+  biquadFilter.Q.value = 10;
+  biquadFilter.gain.value = 20;
+  
     analyser = audioCtx.createAnalyser();
     source = audioCtx.createMediaStreamSource(stream);
-    source.connect(analyser);
+    source.connect(biquadFilter);
+    biquadFilter.connect(analyser);
     //analyser.connect(audioCtx.destination);
     analyser.fftSize = 32;
 
