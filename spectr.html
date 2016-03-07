@@ -63,7 +63,7 @@ and open the template in the editor.
   Browser support for Web Audio API:
   http://caniuse.com/#feat=audio-api
 */
-(function() {
+(function onload() {
   var AudioContext = window.AudioContext ||
       window.webkitAudioContext;
   var audioContext;
@@ -252,7 +252,7 @@ and open the template in the editor.
 	</script>	
 
     </head>
-    <body>
+    <body onload="onload();">
 <img src="https://developers.soundcloud.com/assets/powered_by_large_white-de881ecad8561c2131e7676fa9e92738.png" class="float"></img>
 <div class="top-container">
   <h1>Apply filter effects to music!</h1>
