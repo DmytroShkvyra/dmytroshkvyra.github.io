@@ -60,7 +60,7 @@ var biquadFilter;
 function startAnaliz(stream){
     audioCtx = new AudioContext();
     
-  biquadFilter = audioContext.createBiquadFilter();
+  biquadFilter = audioCtx.createBiquadFilter();
   biquadFilter.type = "lowpass";
   biquadFilter.frequency.value = 1000;
   biquadFilter.Q.value = 10;
