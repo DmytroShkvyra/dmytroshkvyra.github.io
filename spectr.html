@@ -130,16 +130,15 @@ and open the template in the editor.
 
 		window.addEventListener("load", function(e) {
 
-		    biquadFilter = audioContext.createBiquadFilter();
-		    biquadFilter.type = "lowpass";
-		    biquadFilter.frequency.value = 1000;
-		    biquadFilter.Q.value = 10;
-		    biquadFilter.gain.value = 20;
 		    userMedia.getUserMedia('audio', 'input', createSource, alert, undefined);
 
 		    function createSource(stream) {
 			source = audioCtx.createMediaStreamSource(stream);
-			
+		    biquadFilter = audioContext.createBiquadFilter();
+		    biquadFilter.type = "lowpass";
+		    biquadFilter.frequency.value = 1000;
+		    biquadFilter.Q.value = 10;
+		    biquadFilter.gain.value = 20;	
 		    source.connect(biquadFilter);
 		    analyser = audioContext.createAnalyser();
 		    analyser.fftSize = frequencyBars;
