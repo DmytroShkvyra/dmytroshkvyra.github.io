@@ -57,21 +57,72 @@ var frequencyData;
 var analyser;
 var biquadFilter;
 
+var frequencySlider = document.getElementById("frequencySlider");
+var qSlider = document.getElementById("qSlider");
+var gainSlider = document.getElementById("gainSlider");
+var filters = { "lowpass": {
+      q: true,
+      gain: false
+    }, "highpass": {
+      q: true,
+      gain: false 
+    }, "bandpass": {
+      q: true,
+      gain: false 
+    }, "lowshelf": { 
+      q: false,
+      gain: true 
+    }, "highshelf": { 
+      q: false,
+      gain: true 
+    }, "peaking": { 
+      q: true,
+      gain: true 
+    }, "notch": { 
+      q: true,
+      gain: false 
+    }, "allpass": { 
+      q: true,
+      gain: false 
+    } 
+  };
+
+  var frequencyBars = 32;
+  // Array containing all the frequencies we want to get
+  // response for when calling getFrequencyResponse()
+  var myFrequencyArray = new Float32Array(frequencyBars);
+
+  
+  // We receive the result in these two when calling
+  // getFrequencyResponse()
+  var magResponseOutput = new Float32Array(frequencyBars); // magnitude
+  var phaseResponseOutput = new Float32Array(frequencyBars); 
+
+
 function startAnaliz(stream){
     audioCtx = new AudioContext();
     
+  for(var i = 0; i < frequencyBars; ++i) {
+    myFrequencyArray[i] = ((frequencyBars - 1) * audioCtx.samplerate/frequencyBars|0)/frequencyBars*(i+1);
+  } 
+  
   biquadFilter = audioCtx.createBiquadFilter();
   biquadFilter.type = "lowpass";
   biquadFilter.frequency.value = 1000;
   biquadFilter.Q.value = 10;
   biquadFilter.gain.value = 20;
   
+    // We receive the result in these two when calling
+  // getFrequencyResponse()
+  var magResponseOutput = new Float32Array(frequencyBars); // magnitude
+  var phaseResponseOutput = new Float32Array(frequencyBars);  
+  
     analyser = audioCtx.createAnalyser();
     source = audioCtx.createMediaStreamSource(stream);
     source.connect(biquadFilter);
     biquadFilter.connect(analyser);
     //analyser.connect(audioCtx.destination);
-    analyser.fftSize = 32;
+    analyser.fftSize = frequencyBars;
 
     frequencyData = new Uint8Array(analyser.frequencyBinCount);
 //    audio.pause();
@@ -102,7 +153,6 @@ window.onload = function() {
 
     </head>
     <body>
-	<audio id="audio"></audio>
 	<div id="bar">
 	    <div id="P10" class="p"></div>
 	    <div id="P20" class="p"></div>
@@ -113,6 +163,11 @@ window.onload = function() {
 	    <div id="P70" class="p"></div>
 	    <div id="P80" class="p"></div>
 	    <div id="P90" class="p"></div>
+	</div>
+	<div>
+<input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
+    <input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
+    <input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />	    
 	</div>
     </body>
 </html>
