@@ -72,8 +72,13 @@ and open the template in the editor.
   var frequencySlider = document.getElementById("frequencySlider");
   var qSlider = document.getElementById("qSlider");
   var gainSlider = document.getElementById("gainSlider");
-  
   var audio;
+    var userMedia = new UserMedia();
+    userMedia.getUserMedia('audio', 'input', success, alert, undefined);
+    function success(stream){
+	audio = stream;
+    }
+ 
   
   // All Web Audio API filters
   // https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
@@ -134,7 +139,7 @@ and open the template in the editor.
     audio = document.getElementById("theSong");   
     audio.crossOrigin = "anonymous";
 
-    var source = audioContext.createMediaElementSource(audio);
+    var source = audioContext.createMediaStreamSource(audio);
     
     biquadFilter = audioContext.createBiquadFilter();
     biquadFilter.type = "lowpass";
