@@ -61,7 +61,7 @@ function startAnaliz(stream){
     analyser = audioCtx.createAnalyser();
     source = audioCtx.createMediaStreamSource(stream);
     source.connect(analyser);
-    analyser.connect(audioCtx.destination);
+    //analyser.connect(audioCtx.destination);
     analyser.fftSize = 32;
 
     frequencyData = new Uint8Array(analyser.frequencyBinCount);
@@ -81,6 +81,7 @@ function renderFrame() {
     P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
     P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
     P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
+    P10.value= 'Hz';
     console.log(frequencyData);
     requestAnimationFrame(renderFrame);
 }
