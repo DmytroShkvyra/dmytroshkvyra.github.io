@@ -11,144 +11,239 @@ and open the template in the editor.
 	<meta name="viewport" content="width=device-width">
 	<script data-turbolinks-track="true" src="/js/usermedia.js"></script>
 	<style>
-	    #bar {
-		position: fixed;
-		top: 20%;
-		left: 40%;
-		width: 40%;
-		height: 40%;
-		-webkit-transition: 0.1s ease all;
+	    body {
+		background-color: #141722;
+		text-align: center;
+		margin: 0 auto;
+		position: relative;
+	    }
+	    .float {
+		position: absolute;
+		left: 0;
+		top: 0;
 	    }
 
-	    .p {
-		background-color: blue;
-		height: 100%;
-		width: 10%;
-		float: left;
+	    .top-container {
+		color: #fff;
+		font-family: sans-serif;
+		width: 100%;
+		padding-top: 40px;
+		padding-bottom: 40px;
+		margin: 0 auto;
+		text-align: center;
+		margin-bottom: 40px;
+		border-bottom: 2px solid rgba(0, 0, 0, 1);
+		background-color: rgba(128, 128, 128, 0.16);
 	    }
 
+	    .top-container h1 {
+		font-size: 28px;
+	    }
+
+	    .top-container h2 {
+		font-size: 14px;
+		font-weight: 100;
+		opacity: 0.6;
+	    }
+
+	    #canvas {
+		border: 2px solid black;
+		background-color: rgba(128, 128, 128, 0.16);
+	    }
+
+	    input:disabled {
+		opacity: 0.1;
+	    }
 	</style>
-	<script>    
-/*function gotStream(stream) {
-    inputPoint = audioContext.createGain();
+	<script>
+	    /*
+	     Read my blog post about Web Audio API:
+	     http://codepen.io/DonKarlssonSan/blog/fun-with-web-audio-api
+	     
+	     Browser support for Web Audio API:
+	     http://caniuse.com/#feat=audio-api
+	     */
+	    var userMedia = new UserMedia();
+	    var source;
+	    userMedia.getUserMedia('audio', 'input', startAnaliz, alert, undefined);
 
-    // Create an AudioNode from the stream.
-    realAudioInput = audioContext.createMediaStreamSource(stream);
-    audioInput = realAudioInput;
-    audioInput.connect(inputPoint);
+	    function createSource(stream) {
+		source = audioCtx.createMediaStreamSource(stream);
+	    }
 
-//    audioInput = convertToMono( input );
+	    (function() {
+		var AudioContext = window.AudioContext ||
+			window.webkitAudioContext;
+		var audioContext;
+		var biquadFilter;
 
-    analyserNode = audioContext.createAnalyser();
-    analyserNode.fftSize = 2048;
-    inputPoint.connect( analyserNode );
+		var frequencySlider = document.getElementById("frequencySlider");
+		var qSlider = document.getElementById("qSlider");
+		var gainSlider = document.getElementById("gainSlider");
 
-    audioRecorder = new Recorder( inputPoint );
+		var audio;
 
-    zeroGain = audioContext.createGain();
-    zeroGain.gain.value = 0.0;
-    inputPoint.connect( zeroGain );
-    zeroGain.connect( audioContext.destination );
-    updateAnalysers();
-}*/
+		// All Web Audio API filters
+		// https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
+		// q and gain controls if the corresponding slider
+		// should be enabled
+		var filters = {"lowpass": {
+			q: true,
+			gain: false
+		    }, "highpass": {
+			q: true,
+			gain: false
+		    }, "bandpass": {
+			q: true,
+			gain: false
+		    }, "lowshelf": {
+			q: false,
+			gain: true
+		    }, "highshelf": {
+			q: false,
+			gain: true
+		    }, "peaking": {
+			q: true,
+			gain: true
+		    }, "notch": {
+			q: true,
+			gain: false
+		    }, "allpass": {
+			q: true,
+			gain: false
+		    }
+		};
 
-var userMedia = new UserMedia();
-var frequencyData;
-var analyser;
-var biquadFilter;
+		var canvas = document.getElementById("canvas");
+		var canvasContext = canvas.getContext("2d");
 
-var frequencySlider = document.getElementById("frequencySlider");
-var qSlider = document.getElementById("qSlider");
-var gainSlider = document.getElementById("gainSlider");
-var filters = { "lowpass": {
-      q: true,
-      gain: false
-    }, "highpass": {
-      q: true,
-      gain: false 
-    }, "bandpass": {
-      q: true,
-      gain: false 
-    }, "lowshelf": { 
-      q: false,
-      gain: true 
-    }, "highshelf": { 
-      q: false,
-      gain: true 
-    }, "peaking": { 
-      q: true,
-      gain: true 
-    }, "notch": { 
-      q: true,
-      gain: false 
-    }, "allpass": { 
-      q: true,
-      gain: false 
-    } 
-  };
+		var frequencyBars = 100;
+		// Array containing all the frequencies we want to get
+		// response for when calling getFrequencyResponse()
+		var myFrequencyArray = new Float32Array(frequencyBars);
+		for (var i = 0; i < frequencyBars; ++i) {
+		    myFrequencyArray[i] = 2000 / frequencyBars * (i + 1);
+		}
 
-  var frequencyBars = 32;
-  // Array containing all the frequencies we want to get
-  // response for when calling getFrequencyResponse()
-  var myFrequencyArray = new Float32Array(frequencyBars);
+		// We receive the result in these two when calling
+		// getFrequencyResponse()
+		var magResponseOutput = new Float32Array(frequencyBars); // magnitude
+		var phaseResponseOutput = new Float32Array(frequencyBars);
 
-  
-  // We receive the result in these two when calling
-  // getFrequencyResponse()
-  var magResponseOutput = new Float32Array(frequencyBars); // magnitude
-  var phaseResponseOutput = new Float32Array(frequencyBars); 
+		audioContext = new AudioContext();
+
+		window.addEventListener("load", function(e) {
+
+		    biquadFilter = audioContext.createBiquadFilter();
+		    biquadFilter.type = "lowpass";
+		    biquadFilter.frequency.value = 1000;
+		    biquadFilter.Q.value = 10;
+		    biquadFilter.gain.value = 20;
+
+		    source.connect(biquadFilter);
+		    analyser = audioContext.createAnalyser();
+		    analyser.fftSize = frequencyBars;
+		    biquadFilter.connect(analyser);
 
 
-function startAnaliz(stream){
-    audioCtx = new AudioContext();
-    
-  for(var i = 0; i < frequencyBars; ++i) {
-    myFrequencyArray[i] = ((frequencyBars - 1) * audioCtx.samplerate/frequencyBars|0)/frequencyBars*(i+1);
-  } 
-  
-  biquadFilter = audioCtx.createBiquadFilter();
-  biquadFilter.type = "lowpass";
-  biquadFilter.frequency.value = 1000;
-  biquadFilter.Q.value = 10;
-  biquadFilter.gain.value = 20;
-  
-    // We receive the result in these two when calling
-  // getFrequencyResponse()
-  var magResponseOutput = new Float32Array(frequencyBars); // magnitude
-  var phaseResponseOutput = new Float32Array(frequencyBars);  
-  
-    analyser = audioCtx.createAnalyser();
-    source = audioCtx.createMediaStreamSource(stream);
-    source.connect(biquadFilter);
-    biquadFilter.connect(analyser);
-    //analyser.connect(audioCtx.destination);
-    analyser.fftSize = frequencyBars;
+		    //biquadFilter.connect(audioContext.destination);
+		    frequencyData = new Uint8Array(analyser.frequencyBinCount);
+		    renderFrame();
+		    updateFrequencyResponse();
+		}, false);
 
-    frequencyData = new Uint8Array(analyser.frequencyBinCount);
-//    audio.pause();
-//    audio.play();
-    renderFrame();
-}
+		function drawFrequencyResponse(mag, phase) {
+		    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+		    var barWidth = 400 / frequencyBars;
 
-function renderFrame() {
-    analyser.getByteFrequencyData(frequencyData);
-    P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
-    P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-    P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
-    P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
-    P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
-    P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
-    P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
-    P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-    P10.value= 'Hz';
-    console.log(frequencyData);
-    requestAnimationFrame(renderFrame);
-}
-		
-window.onload = function() {
-    userMedia.getUserMedia('audio', 'input', startAnaliz, alert, undefined);
-};
+		    // Magnitude
+		    canvasContext.strokeStyle = "white";
+		    canvasContext.beginPath();
+		    for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+			canvasContext.lineTo(
+				frequencyStep * barWidth,
+				canvas.height - mag[frequencyStep] * 90);
+		    }
+		    canvasContext.stroke();
+
+		    // Phase
+		    canvasContext.strokeStyle = "red";
+		    canvasContext.beginPath();
+		    for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+			canvasContext.lineTo(
+				frequencyStep * barWidth,
+				canvas.height - (phase[frequencyStep] * 90 + 300) / Math.PI);
+		    }
+		    canvasContext.stroke();
+		}
+
+		function renderFrame() {
+		    analyser.getByteFrequencyData(frequencyData);
+		    P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
+		    P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
+		    P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
+		    P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
+		    P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
+		    P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
+		    P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
+		    P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
+		    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
+		    //P10.value= 'Hz';
+		    console.log(frequencyData);
+		    requestAnimationFrame(renderFrame);
+		}
+
+		function updateFrequencyResponse() {
+		    biquadFilter.getFrequencyResponse(
+			    myFrequencyArray,
+			    magResponseOutput,
+			    phaseResponseOutput);
+		    drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
+		}
+
+
+		frequencySlider.addEventListener("change", function() {
+		    biquadFilter.frequency.value = this.value;
+		});
+
+		frequencySlider.addEventListener("mousemove", function() {
+		    biquadFilter.frequency.value = this.value;
+		    updateFrequencyResponse();
+		});
+
+		qSlider.addEventListener("mousemove", function() {
+		    biquadFilter.Q.value = this.value;
+		    updateFrequencyResponse();
+		});
+
+		gainSlider.addEventListener("mousemove", function() {
+		    biquadFilter.gain.value = this.value;
+		    updateFrequencyResponse();
+		});
+
+		var filtersDropdown = document.getElementById("filtersDropdown");
+
+		for (var item in filters) {
+		    var option = document.createElement("option");
+		    option.innerHTML = item;
+		    // This will cause a re-flow of the page but we don't care
+		    filtersDropdown.appendChild(option);
+		}
+		;
+
+		function filterClicked(event) {
+		    event = event || window.event;
+		    var target = event.target || event.srcElement;
+		    var filterName = target.value;
+		    biquadFilter.type = filterName;
+		    updateFrequencyResponse();
+		    qSlider.disabled = !filters[filterName].q;
+		    gainSlider.disabled = !filters[filterName].gain;
+		}
+		;
+		filtersDropdown.addEventListener("change", filterClicked, false);
+
+	    })();
 	</script>	
 
     </head>
@@ -164,14 +259,23 @@ window.onload = function() {
 	    <div id="P80" class="p"></div>
 	    <div id="P90" class="p"></div>
 	</div>
-	<div>
-<input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
-    <input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
-    <input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />	    
+	<div class="top-container">
+	    <h1>Apply filter effects to music!</h1>
+	    <h2>Draw the sliders and hear how it effects the sound. <br>But be careful with the volume, don't damage your<br> hearing/headphones/speakers!</h2>
+
 	</div>
-	  <p>
-    <select id="filtersDropdown">
-    </select>
-  </p>
+
+	<div id="controls">
+	    <p>
+		<select id="filtersDropdown">
+		</select>
+	    </p>
+	    <canvas id="canvas" width="400" height ="200"></canvas>
+	    <p>
+		<input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
+		<input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
+		<input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />
+	    </p>
+	</div>
     </body>
 </html>
