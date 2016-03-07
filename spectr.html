@@ -63,7 +63,7 @@ and open the template in the editor.
   Browser support for Web Audio API:
   http://caniuse.com/#feat=audio-api
 */
- function onloadBody() {
+{
   var AudioContext = window.AudioContext ||
       window.webkitAudioContext;
   var audioContext;
@@ -140,7 +140,7 @@ and open the template in the editor.
     analyser = audioContext.createAnalyser();
 
 
-  window.addEventListener("load", function(e) {
+  function load(e) {
     audio = document.getElementById("theSong");   
     audio.crossOrigin = "anonymous";
 
@@ -164,7 +164,7 @@ and open the template in the editor.
     renderFrame();    
 
     updateFrequencyResponse();
-  }, false);
+  };
 
 function renderFrame() {
     analyser.getByteFrequencyData(frequencyData);
@@ -260,7 +260,7 @@ function renderFrame() {
 	</script>	
 
     </head>
-    <body onload="onloadBody();">
+    <body onload="load();">
 <div class="top-container">
 	<div id="bar">
 	    <div id="P10" class="p"></div>
