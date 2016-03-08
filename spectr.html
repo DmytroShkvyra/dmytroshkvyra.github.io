@@ -76,7 +76,7 @@ and open the template in the editor.
       /*
        Read my blog post about Web Audio API:
        http://codepen.io/DonKarlssonSan/blog/fun-with-web-audio-api
-     
+       
        Browser support for Web Audio API:
        http://caniuse.com/#feat=audio-api
        */
@@ -167,16 +167,16 @@ and open the template in the editor.
             qSlider = document.getElementById("qSlider");
             gainSlider = document.getElementById("gainSlider");
             fftSlider = document.getElementById("fftSlider");
-            
-            
+
+
             fftSlider.addEventListener("change", function() {
-              analyser.fftSize = this.value;
+              analyser.fftSize = Math.pow(2, this.value);
             });
 
             fftSlider.addEventListener("mousemove", function() {
-              analyser.fftSize = this.value;
-            });            
-            
+              analyser.fftSize = Math.pow(2, this.value);
+            });
+
 
             frequencySlider.addEventListener("change", function() {
               biquadFilter.frequency.value = this.value;
@@ -211,7 +211,7 @@ and open the template in the editor.
             source.connect(biquadFilter);
             biquadFilter.connect(analyser);
 
-            
+
             //analyser.connect(audioContext.destination);
 
 
@@ -222,7 +222,8 @@ and open the template in the editor.
               option.innerHTML = item;
               // This will cause a re-flow of the page but we don't care
               filtersDropdown.appendChild(option);
-            };
+            }
+            ;
 
             function filterClicked(event) {
               event = event || window.event;
@@ -236,15 +237,16 @@ and open the template in the editor.
             ;
             filtersDropdown.addEventListener("change", filterClicked, false);
 
-            analyser.fftSize = fftSlider.value; 
+            analyser.fftSize = Math.pow(2, fftSlider.value);
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
-  //    audio.pause();
-  //    audio.play();
+            //    audio.pause();
+            //    audio.play();
             renderFrame();
 
             updateFrequencyResponse();
           }
-        };
+        }
+        ;
 
         function renderFrame() {
           analyser.getByteFrequencyData(frequencyData);
@@ -294,7 +296,8 @@ and open the template in the editor.
           drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
         }
 
-      };
+      }
+      ;
 
     </script>	
 
@@ -325,7 +328,7 @@ and open the template in the editor.
         <input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
         <input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
         <input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />
-        <input id="fftSlider" title="FFT size" type="range" min="32" max="2048" value="16" />
+        <input id="fftSlider" title="FFT size" type="range" min="5" max="10" value="5" />
       </p>
     </div>
   </body>
