@@ -13,10 +13,11 @@ and open the template in the editor.
 	<style>
 	    #bar {
 		position: relative;
-		top: 20%;
-		left: 40%;
 		text-align: center;
-		height: 40%;
+		height: 200px;
+		width: 100%;
+		display: block;
+		visibility: visible;
 		-webkit-transition: 0.1s ease all;
 	    }
 
@@ -199,7 +200,7 @@ and open the template in the editor.
     source.connect(biquadFilter);
     biquadFilter.connect(analyser);
     
-    analyser.fftSize = 32;
+    //analyser.fftSize = 32;
     //analyser.connect(audioContext.destination);
  
  
@@ -280,10 +281,6 @@ function renderFrame() {
       phaseResponseOutput);
     drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
   }
-
-  
-
-
 
 };
 
