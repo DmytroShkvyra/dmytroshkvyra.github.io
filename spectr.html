@@ -171,10 +171,12 @@ and open the template in the editor.
 
             fftSlider.addEventListener("change", function() {
               analyser.fftSize = Math.pow(2, this.value);
+              frequencyData = new Uint8Array(analyser.frequencyBinCount);
             });
 
             fftSlider.addEventListener("mousemove", function() {
               analyser.fftSize = Math.pow(2, this.value);
+              frequencyData = new Uint8Array(analyser.frequencyBinCount);
             });
 
 
