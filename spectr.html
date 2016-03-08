@@ -77,6 +77,7 @@ and open the template in the editor.
     userMedia.getUserMedia('audio', 'input', success, alert, undefined);
     function success(stream){
 	audio = stream;
+	load(stream);
     }
  
   
@@ -165,7 +166,8 @@ and open the template in the editor.
   });     
     canvas = document.getElementById("canvas");
     canvasContext = canvas.getContext("2d");
-
+    
+    if (audio !== unefined){
     var source = audioContext.createMediaStreamSource(audio);
     
     biquadFilter = audioContext.createBiquadFilter();
@@ -208,6 +210,7 @@ and open the template in the editor.
     renderFrame();    
 
     updateFrequencyResponse();
+    }
   };
 
 function renderFrame() {
