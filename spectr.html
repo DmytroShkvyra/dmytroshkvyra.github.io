@@ -69,9 +69,9 @@ and open the template in the editor.
   var audioContext;
   var biquadFilter;
   
-  var frequencySlider = document.getElementById("frequencySlider");
-  var qSlider = document.getElementById("qSlider");
-  var gainSlider = document.getElementById("gainSlider");
+  var frequencySlider;
+  var qSlider;
+  var gainSlider;
   var audio;
     var userMedia = new UserMedia();
     userMedia.getUserMedia('audio', 'input', success, alert, undefined);
@@ -141,6 +141,10 @@ and open the template in the editor.
 
 
   function load(e) {
+  frequencySlider = document.getElementById("frequencySlider");
+  qSlider = document.getElementById("qSlider");
+  gainSlider = document.getElementById("gainSlider");      
+      
    frequencySlider.addEventListener("change", function () {
     biquadFilter.frequency.value = this.value; 
   });
