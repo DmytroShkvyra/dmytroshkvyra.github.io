@@ -200,7 +200,7 @@ and open the template in the editor.
     source.connect(biquadFilter);
     biquadFilter.connect(analyser);
     
-    //analyser.fftSize = 32;
+    analyser.fftSize = 32;
     //analyser.connect(audioContext.destination);
  
  
@@ -245,7 +245,7 @@ function renderFrame() {
     P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
     P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
     P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-    console.log(frequencyData);
+    //console.log(frequencyData);
     requestAnimationFrame(renderFrame);
 }
 
@@ -280,6 +280,8 @@ function renderFrame() {
       magResponseOutput,
       phaseResponseOutput);
     drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
+    console.log(magResponseOutput);
+    requestAnimationFrame(updateFrequencyResponse);
   }
 
 };
