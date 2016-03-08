@@ -111,8 +111,8 @@ and open the template in the editor.
     } 
   };
   
-  var canvas = document.getElementById("canvas");
-  var canvasContext = canvas.getContext("2d");
+  var canvas;
+  var canvasContext;
   
   var analyser;
 
@@ -141,6 +141,10 @@ and open the template in the editor.
 
 
   function load(e) {
+      
+    canvas = document.getElementById("canvas");
+    canvasContext = canvas.getContext("2d");
+  
     audio = document.getElementById("theSong");   
     audio.crossOrigin = "anonymous";
 
