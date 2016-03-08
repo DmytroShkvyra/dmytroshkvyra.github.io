@@ -170,11 +170,11 @@ and open the template in the editor.
             
             
             fftSlider.addEventListener("change", function() {
-              analyser.fftSize.value = this.value;
+              analyser.fftSize = this.value;
             });
 
             fftSlider.addEventListener("mousemove", function() {
-              analyser.fftSize.value = this.value;
+              analyser.fftSize = this.value;
             });            
             
 
@@ -236,7 +236,7 @@ and open the template in the editor.
             ;
             filtersDropdown.addEventListener("change", filterClicked, false);
 
-
+            analyser.fftSize = fftSlider.value; 
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
   //    audio.pause();
   //    audio.play();
@@ -244,8 +244,7 @@ and open the template in the editor.
 
             updateFrequencyResponse();
           }
-        }
-        ;
+        };
 
         function renderFrame() {
           analyser.getByteFrequencyData(frequencyData);
@@ -258,7 +257,7 @@ and open the template in the editor.
           P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
           P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
           P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-          console.log('frequencyData.length' + frequencyData.length);
+          console.log('frequencyData.length = ' + frequencyData.length);
           requestAnimationFrame(renderFrame);
         }
 
@@ -295,8 +294,7 @@ and open the template in the editor.
           drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
         }
 
-      }
-      ;
+      };
 
     </script>	
 
