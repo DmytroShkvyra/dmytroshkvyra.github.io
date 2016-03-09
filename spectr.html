@@ -251,17 +251,16 @@ and open the template in the editor.
 
 
           var deviceIdDropdown = document.getElementById("deviceDropdown");
-          while (deviceIdDropdown.lastChild) {
-            deviceIdDropdown.removeChild(deviceIdDropdown.lastChild);
-          }
-          for (var item in userMedia.devices) {
-            if (userMedia.devices[item].kind === userMedia.kindofmedia + userMedia.inout) {
-              var option = document.createElement("option");
-              option.innerHTML = userMedia.devices[item].label;
-              option.deviceId = userMedia.devices[item].deviceId;
-              // This will cause a re-flow of the page but we don't care
-              //selectedIndex
-              deviceIdDropdown.appendChild(option);
+          if (deviceIdDropdown.childElementCount == 0) {
+            for (var item in userMedia.devices) {
+              if (userMedia.devices[item].kind === userMedia.kindofmedia + userMedia.inout) {
+                var option = document.createElement("option");
+                option.innerHTML = userMedia.devices[item].label;
+                option.deviceId = userMedia.devices[item].deviceId;
+                // This will cause a re-flow of the page but we don't care
+                //selectedIndex
+                deviceIdDropdown.appendChild(option);
+              }
             }
           }
 
