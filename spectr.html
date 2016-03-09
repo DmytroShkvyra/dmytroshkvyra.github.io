@@ -154,7 +154,7 @@ and open the template in the editor.
         audioContext = new AudioContext();
 
         biquadFilter = audioContext.createBiquadFilter();
-        biquadFilter.type = "lowpass";
+        biquadFilter.type = "highshelf";
         biquadFilter.frequency.value = 1000;
         biquadFilter.Q.value = 10;
         biquadFilter.gain.value = 20;
@@ -168,6 +168,7 @@ and open the template in the editor.
         var myNode = document.getElementById("bar");
         var needrename = false;
         while (myNode.lastChild && (myNode.childElementCount > frequencyData.length)) {
+          needrename = true;
           myNode.removeChild(myNode.lastChild);
         }
         while (myNode.childElementCount < frequencyData.length) {
@@ -184,8 +185,6 @@ and open the template in the editor.
             eval('P'+i+'.style.width = (100 / frequencyData.length) + "%"');
           }
           eval('P'+i+'.style.height = ((frequencyData[i] * 100) / 256) + "%"');
-          //myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
-          //myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
         }
 
       }
@@ -238,7 +237,7 @@ and open the template in the editor.
           var source = audioContext.createMediaStreamSource(audio);
 
           biquadFilter = audioContext.createBiquadFilter();
-          biquadFilter.type = "lowpass";
+          biquadFilter.type = "highshelf";
           biquadFilter.frequency.value = 1000;
           biquadFilter.Q.value = 10;
           biquadFilter.gain.value = 20;
@@ -248,6 +247,25 @@ and open the template in the editor.
 
 
           //analyser.connect(audioContext.destination);
+          
+          
+          var deviceIdDropdown = document.getElementById("deviceDropdown");
+
+          for (var item in userMedia.devices) {
+            var option = document.createElement("option");
+            option.innerHTML = item.deviceId;
+            // This will cause a re-flow of the page but we don't care
+            deviceIdDropdown.appendChild(option);
+          }
+
+          function devicesClicked(event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement;
+            var device = target.value;
+            userMedia.getUserMedia('audio', 'input', success, alert, device.deviceId);
+          }
+
+          deviceIdDropdown.addEventListener("change", devicesClicked, false);          
 
 
           var filtersDropdown = document.getElementById("filtersDropdown");
@@ -294,7 +312,7 @@ and open the template in the editor.
     P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
     P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
     P90.style.height = ((frequencyData[8] * 100) / 256) + "%";*/
-        console.log(frequencyData);
+        //console.log(frequencyData);
         requestAnimationFrame(renderFrame);
       }
 
@@ -354,6 +372,10 @@ and open the template in the editor.
       <p>
         <select id="filtersDropdown">
         </select>
+      </p>
+      <p> 
+        <select id="deviceDropdown">
+        </select>        
       </p>
       <canvas id="canvas" width="400" height ="200"></canvas>
       <p>
