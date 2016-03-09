@@ -96,6 +96,10 @@ and open the template in the editor.
         var gainSlider;
         var audio;
         var userMedia = new UserMedia();
+        function success(stream) {
+          audio = stream;
+          load(stream);
+        }        
         userMedia.getUserMedia('audio', 'input', success, alert, undefined);
         function success(stream) {
           audio = stream;
