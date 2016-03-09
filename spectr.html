@@ -157,6 +157,20 @@ and open the template in the editor.
 
         analyser = audioContext.createAnalyser();
 
+        function updateFrame(size,step){
+          var myNode = document.getElementById("bar");
+          while (myNode.lastChild && (myNode.childElementCount > size)) {
+              myNode.removeChild(myNode.lastChild);
+          }
+          while (myNode.childElementCount < size){
+            myNode.appendChild(document.createElement("P"));
+          }            
+          for (var i=0; i< myNode.childElementCount; i++){
+            myNode.children[i].setAttribute('title', i+step);
+          }
+        }
+        
+        }
 
         function load(e) {
 
@@ -172,11 +186,13 @@ and open the template in the editor.
             fftSlider.addEventListener("change", function() {
               analyser.fftSize = Math.pow(2, this.value);
               frequencyData = new Uint8Array(analyser.frequencyBinCount);
+              updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
             });
 
             fftSlider.addEventListener("mousemove", function() {
               analyser.fftSize = Math.pow(2, this.value);
               frequencyData = new Uint8Array(analyser.frequencyBinCount);
+              updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
             });
 
 
@@ -224,8 +240,7 @@ and open the template in the editor.
               option.innerHTML = item;
               // This will cause a re-flow of the page but we don't care
               filtersDropdown.appendChild(option);
-            }
-            ;
+            };
 
             function filterClicked(event) {
               event = event || window.event;
@@ -241,6 +256,7 @@ and open the template in the editor.
 
             analyser.fftSize = Math.pow(2, fftSlider.value);
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
+            updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
             //    audio.pause();
             //    audio.play();
             renderFrame();
