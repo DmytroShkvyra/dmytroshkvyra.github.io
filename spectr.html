@@ -284,7 +284,7 @@ and open the template in the editor.
 
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
-        updateFrame(frequencyData, audioContext.sampleRate / (analyser.fftSize*2));
+        updateFrame(frequencyData, audioContext.sampleRate / (analyser.fftSize));
             /*P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
     P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
     P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
