@@ -166,18 +166,20 @@ and open the template in the editor.
 
       function updateFrame(frequencyData, step) {
         var myNode = document.getElementById("bar");
+        var needrename = false;
         while (myNode.lastChild && (myNode.childElementCount > frequencyData.length)) {
           myNode.removeChild(myNode.lastChild);
         }
         while (myNode.childElementCount < frequencyData.length) {
-          var el = document.createElement("P");
-          el.setAttribute('title', i + step);
+          needrename = true;
+          var el = document.createElement("div");
           el.setAttribute('class', 'p');
           myNode.appendChild(el);
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
+          if (needrename) el.setAttribute('title', i + step);
           myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
-          //myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
+          myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
         }
 
       }
