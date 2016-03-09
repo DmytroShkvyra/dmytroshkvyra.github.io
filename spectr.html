@@ -156,6 +156,9 @@ and open the template in the editor.
         biquadFilter.gain.value = 20;
 
         analyser = audioContext.createAnalyser();
+       
+        };
+
 
         function updateFrame(size,step){
           var myNode = document.getElementById("bar");
@@ -168,9 +171,7 @@ and open the template in the editor.
           for (var i=0; i< myNode.childElementCount; i++){
             myNode.children[i].setAttribute('title', i+step);
           }
-        }
-        
-        }
+        };
 
         function load(e) {
 
@@ -263,8 +264,7 @@ and open the template in the editor.
 
             updateFrequencyResponse();
           }
-        }
-        ;
+        };
 
         function renderFrame() {
           analyser.getByteFrequencyData(frequencyData);
@@ -279,7 +279,7 @@ and open the template in the editor.
           P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
           console.log('frequencyData.length = ' + frequencyData.length);
           requestAnimationFrame(renderFrame);
-        }
+        };
 
         function drawFrequencyResponse(mag, phase) {
           canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -315,8 +315,6 @@ and open the template in the editor.
         }
 
       }
-      ;
-
     </script>	
 
   </head>
