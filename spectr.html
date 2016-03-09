@@ -190,7 +190,7 @@ and open the template in the editor.
           maxFreq = (((frequencyData[i] * 100) / 256)>0)?((frequencyData[i] * 100) / 256):0;
           eval('P' + i + '.style.height = ((frequencyData[i] * 100) / 256) + "%"');
         }
-        document.getElementById("top-container").title = maxFreq;
+        document.getElementById("maxFreq").value = maxFreq;
       };
 
 
@@ -365,7 +365,7 @@ and open the template in the editor.
   </head>
   <body onload="load();">
 
-    <div class="top-container" title="0">
+    <div class="top-container">
       <div id="bar">
         <div id="P0" class="p"></div>
         <div id="P1" class="p"></div>
@@ -380,6 +380,7 @@ and open the template in the editor.
     </div>
 
     <div id="controls">
+      <p><input id="maxFreq" value="0"/></p>
       <p>
         <select id="filtersDropdown">
         </select>
