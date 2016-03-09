@@ -170,6 +170,7 @@ and open the template in the editor.
         var myNode = document.getElementById("bar");
         var needrename = false;
         var maxFreq;
+        document.getElementById("maxFreq").value = 0
         while (myNode.lastChild && (myNode.childElementCount > frequencyData.length)) {
           needrename = true;
           myNode.removeChild(myNode.lastChild);
