@@ -172,13 +172,19 @@ and open the template in the editor.
         }
         while (myNode.childElementCount < frequencyData.length) {
           needrename = true;
+          var newId = 'P'+ myNode.childElementCount;
           var el = document.createElement("div");
+          el.setAttribute('id', newId);
           el.setAttribute('class', 'p');
           myNode.appendChild(el);
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          if (needrename) myNode.children[i].setAttribute('title', i * step);
-          myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
+          if (needrename){
+            myNode.children[i].setAttribute('title', i * step);
+            eval('P'+i+'.style.width = (100 / frequencyData.length) + "%"');
+          }
+          eval('P'+i+'.style.height = ((frequencyData[i] * 100) / 256) + "%"');
+          //myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
           //myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
         }
 
@@ -279,17 +285,16 @@ and open the template in the editor.
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
         updateFrame(frequencyData, audioContext.sampleRate / (analyser.fftSize*2));
-            P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
+            /*P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
     P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-    eval('P20.style.height = "50%"')
     P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
     P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
     P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
     P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
     P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
     P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-    console.log(frequencyData);
+    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";*/
+        console.log(frequencyData);
         requestAnimationFrame(renderFrame);
       }
 
@@ -333,15 +338,15 @@ and open the template in the editor.
 
     <div class="top-container">
       <div id="bar">
-        <div id="P10" class="p"></div>
-        <div id="P20" class="p"></div>
-        <div id="P30" class="p"></div>
-        <div id="P40" class="p"></div>
-        <div id="P50" class="p"></div>
-        <div id="P60" class="p"></div>
-        <div id="P70" class="p"></div>
-        <div id="P80" class="p"></div>
-        <div id="P90" class="p"></div>
+        <div id="P0" class="p"></div>
+        <div id="P1" class="p"></div>
+        <div id="P2" class="p"></div>
+        <div id="P3" class="p"></div>
+        <div id="P4" class="p"></div>
+        <div id="P5" class="p"></div>
+        <div id="P6" class="p"></div>
+        <div id="P7" class="p"></div>
+        <div id="P8" class="p"></div>
       </div>
     </div>
 
