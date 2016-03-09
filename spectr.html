@@ -107,32 +107,32 @@ and open the template in the editor.
         // q and gain controls if the corresponding slider
         // should be enabled
         var filters =
-          { "highshelf": {
-            q: false,
-            gain: true
-          },"lowpass": {
-            q: true,
-            gain: false
-          }, "highpass": {
-            q: true,
-            gain: false
-          }, "bandpass": {
-            q: true,
-            gain: false
-          }, "lowshelf": {
-            q: false,
-            gain: true
-          }, "peaking": {
-            q: true,
-            gain: true
-          }, "notch": {
-            q: true,
-            gain: false
-          }, "allpass": {
-            q: true,
-            gain: false
-          }
-        };
+          {"highshelf": {
+              q: false,
+              gain: true
+            }, "lowpass": {
+              q: true,
+              gain: false
+            }, "highpass": {
+              q: true,
+              gain: false
+            }, "bandpass": {
+              q: true,
+              gain: false
+            }, "lowshelf": {
+              q: false,
+              gain: true
+            }, "peaking": {
+              q: true,
+              gain: true
+            }, "notch": {
+              q: true,
+              gain: false
+            }, "allpass": {
+              q: true,
+              gain: false
+            }
+          };
 
         var canvas;
         var canvasContext;
@@ -174,18 +174,18 @@ and open the template in the editor.
         }
         while (myNode.childElementCount < frequencyData.length) {
           needrename = true;
-          var newId = 'P'+ myNode.childElementCount;
+          var newId = 'P' + myNode.childElementCount;
           var el = document.createElement("div");
           el.setAttribute('id', newId);
           el.setAttribute('class', 'p');
           myNode.appendChild(el);
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          if (needrename){
+          if (needrename) {
             myNode.children[i].setAttribute('title', i * step);
-            eval('P'+i+'.style.width = (100 / frequencyData.length) + "%"');
+            eval('P' + i + '.style.width = (100 / frequencyData.length) + "%"');
           }
-          eval('P'+i+'.style.height = ((frequencyData[i] * 100) / 256) + "%"');
+          eval('P' + i + '.style.height = ((frequencyData[i] * 100) / 256) + "%"');
         }
 
       }
@@ -203,12 +203,12 @@ and open the template in the editor.
 
 
           fftSlider.addEventListener("change", function() {
-            analyser.fftSize = (Math.pow(2, this.value))/2;
+            analyser.fftSize = (Math.pow(2, this.value)) / 2;
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
           });
 
           fftSlider.addEventListener("mousemove", function() {
-            analyser.fftSize = (Math.pow(2, this.value))/2;
+            analyser.fftSize = (Math.pow(2, this.value)) / 2;
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
           });
 
@@ -248,26 +248,29 @@ and open the template in the editor.
 
 
           //analyser.connect(audioContext.destination);
-          
-          
+
+
           var deviceIdDropdown = document.getElementById("deviceDropdown");
 
           for (var item in userMedia.devices) {
-            var option = document.createElement("option");
-            if(userMedia.devices[item].kind === userMedia.kindofmedia+userMedia.inout)
-            option.innerHTML = userMedia.devices[item].label;
-            // This will cause a re-flow of the page but we don't care
-            deviceIdDropdown.appendChild(option);
+            if (userMedia.devices[item].kind === userMedia.kindofmedia + userMedia.inout) {
+              var option = document.createElement("option");
+              option.innerHTML = userMedia.devices[item].label;
+              option.deviceId = userMedia.devices[item].deviceId;
+              // This will cause a re-flow of the page but we don't care
+              //selectedIndex
+              deviceIdDropdown.appendChild(option);
+            }
           }
 
           function devicesClicked(event) {
             event = event || window.event;
             var target = event.target || event.srcElement;
-            var device = target.value;
-            userMedia.getUserMedia(userMedia.kindofmedia, userMedia.inout, success, alert, device.deviceId);
+            var deviceId = target[selectedIndex].deviceId;
+            userMedia.getUserMedia(userMedia.kindofmedia, userMedia.inout, success, alert, deviceId);
           }
 
-          deviceIdDropdown.addEventListener("change", devicesClicked, false);          
+          deviceIdDropdown.addEventListener("change", devicesClicked, false);
 
 
           var filtersDropdown = document.getElementById("filtersDropdown");
@@ -291,7 +294,7 @@ and open the template in the editor.
 
           filtersDropdown.addEventListener("change", filterClicked, false);
 
-          analyser.fftSize = Math.pow(2, fftSlider.value)/2;
+          analyser.fftSize = Math.pow(2, fftSlider.value) / 2;
           frequencyData = new Uint8Array(analyser.frequencyBinCount);
           //    audio.pause();
           //    audio.play();
@@ -305,15 +308,15 @@ and open the template in the editor.
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
         updateFrame(frequencyData, audioContext.sampleRate / (analyser.fftSize));
-            /*P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
-    P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-    P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
-    P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
-    P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
-    P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
-    P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
-    P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-    P90.style.height = ((frequencyData[8] * 100) / 256) + "%";*/
+        /*P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
+         P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
+         P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
+         P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
+         P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
+         P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
+         P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
+         P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
+         P90.style.height = ((frequencyData[8] * 100) / 256) + "%";*/
         //console.log(frequencyData);
         requestAnimationFrame(renderFrame);
       }
@@ -382,8 +385,8 @@ and open the template in the editor.
       <canvas id="canvas" width="400" height ="200"></canvas>
       <p>
         <input id="frequencySlider" title="Frequency" type="range" min="0" max="2000" value="1000" />
-        <input id="qSlider" title="Q" type="range" min="1" max="100" value="10" />
-        <input id="gainSlider" title="Gain" disabled type="range" min="1" max="100" value="20" />
+        <input id="qSlider" title="Q" disabled type="range" min="1" max="100" value="10" />
+        <input id="gainSlider" title="Gain" type="range" min="1" max="100" value="20" />
         <input id="fftSlider" title="FFT size" type="range" min="6" max="16" value="6" />
       </p>
     </div>
