@@ -24,7 +24,8 @@ and open the template in the editor.
       .p {
         background-color: blue;
         height: 100%;
-        width: 10%;
+        min-height: 1px;
+        min-width: 1px;
         float: left;
       }	    
 
@@ -159,19 +160,23 @@ and open the template in the editor.
       };
 
 
-      function updateFrame(size, step) {
+      function updateFrame(frequencyData, step) {
         var myNode = document.getElementById("bar");
-        while (myNode.lastChild && (myNode.childElementCount > size)) {
+        while (myNode.lastChild && (myNode.childElementCount > frequencyData.lenght)) {
           myNode.removeChild(myNode.lastChild);
         }
-        while (myNode.childElementCount < size) {
+        while (myNode.childElementCount < frequencyData.lenght) {
           myNode.appendChild(document.createElement("P"));
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          myNode.children[i].setAttribute('title', i + step);
+          myNode.children[i].setAttribute('title', i + step)
+            .setAttribute('class', 'p')
+            .setAttribute('height', ((frequencyData[i] * 100) / 256) + "%")
+            .setAttribute('width', (100/frequencyData.lenght) + "%");
         }
+
       }
-      ;
+     
 
       function load(e) {
 
@@ -187,13 +192,11 @@ and open the template in the editor.
           fftSlider.addEventListener("change", function() {
             analyser.fftSize = Math.pow(2, this.value);
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
-            updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
           });
 
           fftSlider.addEventListener("mousemove", function() {
             analyser.fftSize = Math.pow(2, this.value);
             frequencyData = new Uint8Array(analyser.frequencyBinCount);
-            updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
           });
 
 
@@ -242,7 +245,6 @@ and open the template in the editor.
             // This will cause a re-flow of the page but we don't care
             filtersDropdown.appendChild(option);
           }
-          ;
 
           function filterClicked(event) {
             event = event || window.event;
@@ -253,12 +255,11 @@ and open the template in the editor.
             qSlider.disabled = !filters[filterName].q;
             gainSlider.disabled = !filters[filterName].gain;
           }
-          ;
+          
           filtersDropdown.addEventListener("change", filterClicked, false);
 
           analyser.fftSize = Math.pow(2, fftSlider.value);
           frequencyData = new Uint8Array(analyser.frequencyBinCount);
-          updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
           //    audio.pause();
           //    audio.play();
           renderFrame();
@@ -270,19 +271,9 @@ and open the template in the editor.
 
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
-        P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
-        P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-        P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
-        P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
-        P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
-        P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
-        P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
-        P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-        P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-        console.log('frequencyData.length = ' + frequencyData.length);
+        updateFrame(frequencyData, audioContext.sampleRate / analyser.fftSize);
         requestAnimationFrame(renderFrame);
       }
-      ;
 
       function drawFrequencyResponse(mag, phase) {
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
