@@ -156,165 +156,167 @@ and open the template in the editor.
         biquadFilter.gain.value = 20;
 
         analyser = audioContext.createAnalyser();
-       
-        };
+      };
 
 
-        function updateFrame(size,step){
-          var myNode = document.getElementById("bar");
-          while (myNode.lastChild && (myNode.childElementCount > size)) {
-              myNode.removeChild(myNode.lastChild);
-          }
-          while (myNode.childElementCount < size){
-            myNode.appendChild(document.createElement("P"));
-          }            
-          for (var i=0; i< myNode.childElementCount; i++){
-            myNode.children[i].setAttribute('title', i+step);
-          }
-        };
-
-        function load(e) {
-
-
-          if (audio !== undefined) {
-
-            frequencySlider = document.getElementById("frequencySlider");
-            qSlider = document.getElementById("qSlider");
-            gainSlider = document.getElementById("gainSlider");
-            fftSlider = document.getElementById("fftSlider");
-
-
-            fftSlider.addEventListener("change", function() {
-              analyser.fftSize = Math.pow(2, this.value);
-              frequencyData = new Uint8Array(analyser.frequencyBinCount);
-              updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
-            });
-
-            fftSlider.addEventListener("mousemove", function() {
-              analyser.fftSize = Math.pow(2, this.value);
-              frequencyData = new Uint8Array(analyser.frequencyBinCount);
-              updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
-            });
-
-
-            frequencySlider.addEventListener("change", function() {
-              biquadFilter.frequency.value = this.value;
-            });
-
-            frequencySlider.addEventListener("mousemove", function() {
-              biquadFilter.frequency.value = this.value;
-              updateFrequencyResponse();
-            });
-
-            qSlider.addEventListener("mousemove", function() {
-              biquadFilter.Q.value = this.value;
-              updateFrequencyResponse();
-            });
-
-            gainSlider.addEventListener("mousemove", function() {
-              biquadFilter.gain.value = this.value;
-              updateFrequencyResponse();
-            });
-            canvas = document.getElementById("canvas");
-            canvasContext = canvas.getContext("2d");
-
-
-            var source = audioContext.createMediaStreamSource(audio);
-
-            biquadFilter = audioContext.createBiquadFilter();
-            biquadFilter.type = "lowpass";
-            biquadFilter.frequency.value = 1000;
-            biquadFilter.Q.value = 10;
-            biquadFilter.gain.value = 20;
-
-            source.connect(biquadFilter);
-            biquadFilter.connect(analyser);
-
-
-            //analyser.connect(audioContext.destination);
-
-
-            var filtersDropdown = document.getElementById("filtersDropdown");
-
-            for (var item in filters) {
-              var option = document.createElement("option");
-              option.innerHTML = item;
-              // This will cause a re-flow of the page but we don't care
-              filtersDropdown.appendChild(option);
-            };
-
-            function filterClicked(event) {
-              event = event || window.event;
-              var target = event.target || event.srcElement;
-              var filterName = target.value;
-              biquadFilter.type = filterName;
-              updateFrequencyResponse();
-              qSlider.disabled = !filters[filterName].q;
-              gainSlider.disabled = !filters[filterName].gain;
-            }
-            ;
-            filtersDropdown.addEventListener("change", filterClicked, false);
-
-            analyser.fftSize = Math.pow(2, fftSlider.value);
-            frequencyData = new Uint8Array(analyser.frequencyBinCount);
-            updateFrame(frequencyData.length, audioContext.sampleRate/analyser.fftSize);
-            //    audio.pause();
-            //    audio.play();
-            renderFrame();
-
-            updateFrequencyResponse();
-          }
-        };
-
-        function renderFrame() {
-          analyser.getByteFrequencyData(frequencyData);
-          P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
-          P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
-          P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
-          P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
-          P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
-          P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
-          P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
-          P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
-          P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
-          console.log('frequencyData.length = ' + frequencyData.length);
-          requestAnimationFrame(renderFrame);
-        };
-
-        function drawFrequencyResponse(mag, phase) {
-          canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-          var barWidth = 400 / frequencyBars;
-
-          // Magnitude
-          canvasContext.strokeStyle = "white";
-          canvasContext.beginPath();
-          for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
-            canvasContext.lineTo(
-              frequencyStep * barWidth,
-              canvas.height - mag[frequencyStep] * 90);
-          }
-          canvasContext.stroke();
-
-          // Phase
-          canvasContext.strokeStyle = "red";
-          canvasContext.beginPath();
-          for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
-            canvasContext.lineTo(
-              frequencyStep * barWidth,
-              canvas.height - (phase[frequencyStep] * 90 + 300) / Math.PI);
-          }
-          canvasContext.stroke();
+      function updateFrame(size, step) {
+        var myNode = document.getElementById("bar");
+        while (myNode.lastChild && (myNode.childElementCount > size)) {
+          myNode.removeChild(myNode.lastChild);
         }
-
-        function updateFrequencyResponse() {
-          biquadFilter.getFrequencyResponse(
-            myFrequencyArray,
-            magResponseOutput,
-            phaseResponseOutput);
-          drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
+        while (myNode.childElementCount < size) {
+          myNode.appendChild(document.createElement("P"));
         }
-
+        for (var i = 0; i < myNode.childElementCount; i++) {
+          myNode.children[i].setAttribute('title', i + step);
+        }
       }
+      ;
+
+      function load(e) {
+
+
+        if (audio !== undefined) {
+
+          frequencySlider = document.getElementById("frequencySlider");
+          qSlider = document.getElementById("qSlider");
+          gainSlider = document.getElementById("gainSlider");
+          fftSlider = document.getElementById("fftSlider");
+
+
+          fftSlider.addEventListener("change", function() {
+            analyser.fftSize = Math.pow(2, this.value);
+            frequencyData = new Uint8Array(analyser.frequencyBinCount);
+            updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
+          });
+
+          fftSlider.addEventListener("mousemove", function() {
+            analyser.fftSize = Math.pow(2, this.value);
+            frequencyData = new Uint8Array(analyser.frequencyBinCount);
+            updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
+          });
+
+
+          frequencySlider.addEventListener("change", function() {
+            biquadFilter.frequency.value = this.value;
+          });
+
+          frequencySlider.addEventListener("mousemove", function() {
+            biquadFilter.frequency.value = this.value;
+            updateFrequencyResponse();
+          });
+
+          qSlider.addEventListener("mousemove", function() {
+            biquadFilter.Q.value = this.value;
+            updateFrequencyResponse();
+          });
+
+          gainSlider.addEventListener("mousemove", function() {
+            biquadFilter.gain.value = this.value;
+            updateFrequencyResponse();
+          });
+          canvas = document.getElementById("canvas");
+          canvasContext = canvas.getContext("2d");
+
+
+          var source = audioContext.createMediaStreamSource(audio);
+
+          biquadFilter = audioContext.createBiquadFilter();
+          biquadFilter.type = "lowpass";
+          biquadFilter.frequency.value = 1000;
+          biquadFilter.Q.value = 10;
+          biquadFilter.gain.value = 20;
+
+          source.connect(biquadFilter);
+          biquadFilter.connect(analyser);
+
+
+          //analyser.connect(audioContext.destination);
+
+
+          var filtersDropdown = document.getElementById("filtersDropdown");
+
+          for (var item in filters) {
+            var option = document.createElement("option");
+            option.innerHTML = item;
+            // This will cause a re-flow of the page but we don't care
+            filtersDropdown.appendChild(option);
+          }
+          ;
+
+          function filterClicked(event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement;
+            var filterName = target.value;
+            biquadFilter.type = filterName;
+            updateFrequencyResponse();
+            qSlider.disabled = !filters[filterName].q;
+            gainSlider.disabled = !filters[filterName].gain;
+          }
+          ;
+          filtersDropdown.addEventListener("change", filterClicked, false);
+
+          analyser.fftSize = Math.pow(2, fftSlider.value);
+          frequencyData = new Uint8Array(analyser.frequencyBinCount);
+          updateFrame(frequencyData.length, audioContext.sampleRate / analyser.fftSize);
+          //    audio.pause();
+          //    audio.play();
+          renderFrame();
+
+          updateFrequencyResponse();
+        }
+      }
+      ;
+
+      function renderFrame() {
+        analyser.getByteFrequencyData(frequencyData);
+        P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
+        P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
+        P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
+        P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
+        P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
+        P60.style.height = ((frequencyData[5] * 100) / 256) + "%";
+        P70.style.height = ((frequencyData[6] * 100) / 256) + "%";
+        P80.style.height = ((frequencyData[7] * 100) / 256) + "%";
+        P90.style.height = ((frequencyData[8] * 100) / 256) + "%";
+        console.log('frequencyData.length = ' + frequencyData.length);
+        requestAnimationFrame(renderFrame);
+      }
+      ;
+
+      function drawFrequencyResponse(mag, phase) {
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+        var barWidth = 400 / frequencyBars;
+
+        // Magnitude
+        canvasContext.strokeStyle = "white";
+        canvasContext.beginPath();
+        for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+          canvasContext.lineTo(
+            frequencyStep * barWidth,
+            canvas.height - mag[frequencyStep] * 90);
+        }
+        canvasContext.stroke();
+
+        // Phase
+        canvasContext.strokeStyle = "red";
+        canvasContext.beginPath();
+        for (var frequencyStep = 0; frequencyStep < frequencyBars; ++frequencyStep) {
+          canvasContext.lineTo(
+            frequencyStep * barWidth,
+            canvas.height - (phase[frequencyStep] * 90 + 300) / Math.PI);
+        }
+        canvasContext.stroke();
+      }
+
+      function updateFrequencyResponse() {
+        biquadFilter.getFrequencyResponse(
+          myFrequencyArray,
+          magResponseOutput,
+          phaseResponseOutput);
+        drawFrequencyResponse(magResponseOutput, phaseResponseOutput);
+      }
+
     </script>	
 
   </head>
