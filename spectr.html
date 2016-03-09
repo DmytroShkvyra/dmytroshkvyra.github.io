@@ -24,9 +24,9 @@ and open the template in the editor.
       .p {
         background-color: blue;
         height: 100%;
-        width: 10%;
-        //min-height: 1px;
-        //min-width: 1px;
+        width: 1%;
+        min-height: 1px;
+        min-width: 1px;
         float: left;
         //display: block;
         //visibility: visible;
@@ -278,9 +278,10 @@ and open the template in the editor.
 
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
-        updateFrame(frequencyData, audioContext.sampleRate / analyser.fftSize);
+        updateFrame(frequencyData, audioContext.sampleRate / (analyser.fftSize*2));
             P10.style.height = ((frequencyData[0] * 100) / 256) + "%";
     P20.style.height = ((frequencyData[1] * 100) / 256) + "%";
+    eval('P20.style.height = "50%"')
     P30.style.height = ((frequencyData[2] * 100) / 256) + "%";
     P40.style.height = ((frequencyData[3] * 100) / 256) + "%";
     P50.style.height = ((frequencyData[4] * 100) / 256) + "%";
