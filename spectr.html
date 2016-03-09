@@ -251,7 +251,9 @@ and open the template in the editor.
 
 
           var deviceIdDropdown = document.getElementById("deviceDropdown");
-
+          while (deviceIdDropdown.lastChild) {
+            deviceIdDropdown.removeChild(deviceIdDropdown.lastChild);
+          }
           for (var item in userMedia.devices) {
             if (userMedia.devices[item].kind === userMedia.kindofmedia + userMedia.inout) {
               var option = document.createElement("option");
@@ -274,6 +276,9 @@ and open the template in the editor.
 
 
           var filtersDropdown = document.getElementById("filtersDropdown");
+          while (filtersDropdown.lastChild) {
+            filtersDropdown.removeChild(filtersDropdown.lastChild);
+          }
 
           for (var item in filters) {
             var option = document.createElement("option");
