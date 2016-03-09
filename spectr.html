@@ -266,7 +266,7 @@ and open the template in the editor.
           function devicesClicked(event) {
             event = event || window.event;
             var target = event.target || event.srcElement;
-            var deviceId = target[selectedIndex].deviceId;
+            var deviceId = target[target.selectedIndex].deviceId;
             userMedia.getUserMedia(userMedia.kindofmedia, userMedia.inout, success, alert, deviceId);
           }
 
