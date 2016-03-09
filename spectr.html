@@ -188,8 +188,13 @@ and open the template in the editor.
             myNode.children[i].setAttribute('title', i * step);
             eval('P' + i + '.style.width = (100 / frequencyData.length) + "%"');
           }
-          maxFreq = ((((frequencyData[i] * 100) / 256) < 20) && maxFreq === 0)?(i * step):0;
           eval('P' + i + '.style.height = ((frequencyData[i] * 100) / 256) + "%"');
+        }
+        for(var i=frequencyData.length-1; i>=0; i--;){
+          if(frequencyData[i] > 0){
+            maxFreq = i * step;
+            break;
+          }
         }
         document.getElementById("maxFreq").value = maxFreq;
       };
