@@ -157,7 +157,8 @@ and open the template in the editor.
         biquadFilter.gain.value = 20;
 
         analyser = audioContext.createAnalyser();
-      };
+      }
+      ;
 
 
       function updateFrame(frequencyData, step) {
@@ -169,14 +170,14 @@ and open the template in the editor.
           myNode.appendChild(document.createElement("P"));
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          myNode.children[i].setAttribute('title', i + step)
-            .setAttribute('class', 'p')
-            .setAttribute('height', ((frequencyData[i] * 100) / 256) + "%")
-            .setAttribute('width', (100/frequencyData.lenght) + "%");
+          myNode.children[i].setAttribute('title', i + step);
+          myNode.children[i].setAttribute('class', 'p')
+          myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%")
+          myNode.children[i].setAttribute('width', (100 / frequencyData.lenght) + "%");
         }
 
       }
-     
+
 
       function load(e) {
 
@@ -255,7 +256,7 @@ and open the template in the editor.
             qSlider.disabled = !filters[filterName].q;
             gainSlider.disabled = !filters[filterName].gain;
           }
-          
+
           filtersDropdown.addEventListener("change", filterClicked, false);
 
           analyser.fftSize = Math.pow(2, fftSlider.value);
