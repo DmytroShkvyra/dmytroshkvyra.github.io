@@ -106,7 +106,11 @@ and open the template in the editor.
         // https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode/type
         // q and gain controls if the corresponding slider
         // should be enabled
-        var filters = {"lowpass": {
+        var filters =
+          { "highshelf": {
+            q: false,
+            gain: true
+          },"lowpass": {
             q: true,
             gain: false
           }, "highpass": {
@@ -116,9 +120,6 @@ and open the template in the editor.
             q: true,
             gain: false
           }, "lowshelf": {
-            q: false,
-            gain: true
-          }, "highshelf": {
             q: false,
             gain: true
           }, "peaking": {
@@ -253,7 +254,8 @@ and open the template in the editor.
 
           for (var item in userMedia.devices) {
             var option = document.createElement("option");
-            option.innerHTML = item.deviceId;
+            if(userMedia.devices[item].kind === userMedia.kindofmedia+userMedia.inout)
+            option.innerHTML = userMedia.devices[item].label;
             // This will cause a re-flow of the page but we don't care
             deviceIdDropdown.appendChild(option);
           }
@@ -262,7 +264,7 @@ and open the template in the editor.
             event = event || window.event;
             var target = event.target || event.srcElement;
             var device = target.value;
-            userMedia.getUserMedia('audio', 'input', success, alert, device.deviceId);
+            userMedia.getUserMedia(userMedia.kindofmedia, userMedia.inout, success, alert, device.deviceId);
           }
 
           deviceIdDropdown.addEventListener("change", devicesClicked, false);          
