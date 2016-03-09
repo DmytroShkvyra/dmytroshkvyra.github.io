@@ -24,6 +24,7 @@ and open the template in the editor.
       .p {
         background-color: blue;
         height: 100%;
+        width: 1%;
         min-height: 1px;
         min-width: 1px;
         float: left;
@@ -169,13 +170,14 @@ and open the template in the editor.
           myNode.removeChild(myNode.lastChild);
         }
         while (myNode.childElementCount < frequencyData.length) {
-          myNode.appendChild(document.createElement("P"));
+          var el = document.createElement("P");
+          el.setAttribute('title', i + step);
+          el.setAttribute('class', 'p');
+          myNode.appendChild(el);
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          myNode.children[i].setAttribute('title', i + step);
-          myNode.children[i].setAttribute('class', 'p')
-          myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%")
-          myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
+          myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
+          //myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
         }
 
       }
