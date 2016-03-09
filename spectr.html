@@ -25,7 +25,7 @@ and open the template in the editor.
         background-color: blue;
         height: 100%;
         width: 1%;
-        min-height: 1px;
+        //min-height: 1px;
         min-width: 1px;
         float: left;
         display: block;
@@ -177,7 +177,7 @@ and open the template in the editor.
           myNode.appendChild(el);
         }
         for (var i = 0; i < myNode.childElementCount; i++) {
-          if (needrename) el.setAttribute('title', i + step);
+          if (needrename) myNode.children[i].setAttribute('title', i + step);
           myNode.children[i].setAttribute('height', ((frequencyData[i] * 100) / 256) + "%");
           //myNode.children[i].setAttribute('width', (100 / frequencyData.length) + "%");
         }
