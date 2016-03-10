@@ -202,7 +202,7 @@ and open the template in the editor.
             break;
           }
         }
-        console.log(w.decode(frequencyData));
+        document.getElementById("walsh").value = w.decode(frequencyData);
         document.getElementById("maxFreq").value = maxFreq;
       };
 
@@ -393,6 +393,7 @@ and open the template in the editor.
     </div>
 
     <div id="controls">
+      <p><input id="walsh"/></p>
       <p><input id="maxFreq" value="0"/></p>
       <p>
         <select id="filtersDropdown">
