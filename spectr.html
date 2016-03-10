@@ -87,7 +87,7 @@ and open the template in the editor.
        http://caniuse.com/#feat=audio-api
        */
       {
-        var w = new walsh(4,5,3);
+        var w = new walsh(8,10,4);
         var AudioContext = window.AudioContext ||
           window.webkitAudioContext;
         var audioContext;
@@ -203,10 +203,16 @@ and open the template in the editor.
           }
         }
         var decode = w.decode(frequencyData)
-        document.getElementById("walsh0").value = decode['0'];
-		document.getElementById("walsh1").value = decode['1'];
-		document.getElementById("walsh2").value = decode['2'];
-		document.getElementById("walsh3").value = decode['3'];
+		var max = 0;
+		var sym = 0
+        for (var key in decode) {
+			if(decode[key]>max && key != '0' ){
+				max = decode[key];
+				sym = key;
+			}
+        }
+		document.getElementById("walsh0").value = sym;
+		document.getElementById("walsh1").value = max;
         document.getElementById("maxFreq").value = maxFreq;
       };
 
