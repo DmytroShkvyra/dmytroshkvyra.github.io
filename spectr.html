@@ -204,16 +204,24 @@ and open the template in the editor.
         }
         var decode = w.decode(frequencyData)
 		var max = 0;
-		var sym = 0
+		var sym = 0;
+		var avg = 0;
+		var c = 0;
         for (var key in decode) {
+		    if(key != '0'){
+				avg +=decode[key];
+				c++;
+			}
 			if(decode[key]>max && key != '0' ){
 				max = decode[key];
 				sym = key;
 			}
         }
+		avg /= c;
 		document.getElementById("walsh0").value = sym;
 		document.getElementById("walsh1").value = max;
 		document.getElementById("walsh2").value = decode[0];
+		document.getElementById("walsh3").value = avg;
         document.getElementById("maxFreq").value = maxFreq;
       };
 
