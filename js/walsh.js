@@ -65,14 +65,22 @@ function walsh(n, shift, step){
     var res = {};
     for(var i=0; i<this.spectrWalsh.length; i++){
       var mag = 0;
+	  var avg = 0;
+	  var c = 0;
+	  for(c=0; c<this.spectrWalsh[i].length; c++){
+        if(this.spectrWalsh[i][c] !== 0){
+			avg += inputarr[c];
+		}
+      }
+	  avg /= c;
       for(var j=0; j<this.spectrWalsh[i].length; j++){
-        mag += this.spectrWalsh[i][j]*inputarr[j];
+        mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
       res[i]=mag;
     }
       
     return res;
-  }; 
+  };; 
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  
