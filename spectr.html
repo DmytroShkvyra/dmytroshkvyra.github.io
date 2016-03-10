@@ -202,7 +202,11 @@ and open the template in the editor.
             break;
           }
         }
-        document.getElementById("walsh").value = w.decode(frequencyData);
+        var decode = w.decode(frequencyData)
+        document.getElementById("walsh0").value = decode['0'];
+		document.getElementById("walsh1").value = decode['1'];
+		document.getElementById("walsh2").value = decode['2'];
+		document.getElementById("walsh3").value = decode['3'];
         document.getElementById("maxFreq").value = maxFreq;
       };
 
@@ -393,7 +397,10 @@ and open the template in the editor.
     </div>
 
     <div id="controls">
-      <p><input id="walsh"/></p>
+      <p><input id="walsh0"/></p>
+	  <p><input id="walsh1"/></p>
+	  <p><input id="walsh2"/></p>
+	  <p><input id="walsh3"/></p>
       <p><input id="maxFreq" value="0"/></p>
       <p>
         <select id="filtersDropdown">
