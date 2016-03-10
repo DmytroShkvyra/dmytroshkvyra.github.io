@@ -10,6 +10,7 @@ and open the template in the editor.
     <meta charset="windows-1251">
     <meta name="viewport" content="width=device-width">
     <script data-turbolinks-track="true" src="/js/usermedia.js"></script>
+    <script data-turbolinks-track="true" src="/js/walsh.js"></script>
     <style>
       #bar {
         position: relative;
@@ -86,6 +87,7 @@ and open the template in the editor.
        http://caniuse.com/#feat=audio-api
        */
       {
+        var w = new walsh(4,5,3);
         var AudioContext = window.AudioContext ||
           window.webkitAudioContext;
         var audioContext;
@@ -200,6 +202,7 @@ and open the template in the editor.
             break;
           }
         }
+        console.log(w.decode(frequencyData));
         document.getElementById("maxFreq").value = maxFreq;
       };
 
