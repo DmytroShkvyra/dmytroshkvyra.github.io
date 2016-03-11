@@ -2,7 +2,7 @@ function walsh(n, shift, step){
   walsh.prototype.this = this;
   this.n = (n !== undefined)? n: 64;
   this.shift = (shift !== undefined)? shift: 45;
-  this.step = (step !== undefined)? step: 2;
+  this.step = (step !== undefined)? step: 3;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
