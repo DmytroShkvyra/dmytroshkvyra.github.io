@@ -63,7 +63,7 @@ function walsh(n, shift, step){
   
   walsh.prototype.decode = function(inputarr){
     var res = {};
-	var mags = new Array(this.spectrWalsh.length)
+	var mags = new Array(this.spectrWalsh.length).fill(0,0,this.spectrWalsh.length);
     for(var i=1; i<this.spectrWalsh.length; i++){
       var mag = 0;
 	  var avg = 0;
@@ -78,20 +78,24 @@ function walsh(n, shift, step){
         mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
 	  mags[i] = mag;
-	  var diff = 0;
-	  avg = 0
-	  for(var j=1; j<mags[i].length; j++){
-		  avg += mags[i];
-	  }
-	  avg /= (mags.length - 1); 
-	  for(var j=1; j<mags[i].length; j++){
-		  diff += Math.pow(mags[i]-avg, 2);
-	  }
-	  diff /= (mags.length - 1);
-	  mag = Math.sqrt(diff);
-	  res[i]=mag;
     }
-      
+
+	var diff = 0;
+	var avg = 0;
+	var sigma = 0;
+	for(var j=1; j<mags[i].length; j++){
+	  avg += mags[i];
+    }
+	avg /= (mags.length - 1); 
+	for(var j=1; j<mags[i].length; j++){
+	  diff += Math.pow(mags[i]-avg, 2);
+    }
+	diff /= (mags.length - 1);
+	sigma = Math.sqrt(diff);
+	for(var j=1; j<mags[i].length; j++){
+	  res[i] = (mags[i]-avg)/sigma;
+    }
+	
     return res;
   }; 
   
