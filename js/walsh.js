@@ -136,17 +136,17 @@ function walsh(n, shift, step){
     if(this.first === undefined){
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, 250 );
 		return;
 	} else if(this.first === sym){
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, 250 );
 		return;
 	} else {
 		var res = this.encodeMatrix[this.first-1][sym-1];
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, 250 );
 		if(detected !== undefined) detected(res);
 	}
   }  
