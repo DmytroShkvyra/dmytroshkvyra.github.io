@@ -115,6 +115,8 @@ function toggle() {     $("button").toggle();
                   }
 function play() {
 audioContext = new AudioContext();
+osc = audioContext.createOscillator();
+osc.frequency.value = parseFloat(document.getElementById("f").value);
 rate = audioContext.sampleRate;  
 
     var fft = rate/parseInt(document.getElementById("f").value)|0;
@@ -124,9 +126,8 @@ rate = audioContext.sampleRate;
     var imag = new Float32Array(real.length);
     var hornTable = audioContext.createPeriodicWave(real, imag);  
   
-  osc = audioContext.createOscillator();
+  
   osc.setPeriodicWave(hornTable);               
-  osc.frequency.value = parseFloat(document.getElementById("f").value);
   osc.connect(audioContext.destination);
   osc.start();
 }
