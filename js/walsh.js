@@ -97,8 +97,8 @@ function walsh(n, shift, step){
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  
-  this.waves = new Array(n);
-  this.spectrWalsh = new Array(n);
+  this.waves = new Array(this.n);
+  this.spectrWalsh = new Array(this.n);
   for(var i=0; i<this.waves.length; i++){
     this.waves[i] = this.getWave(i);
   }
