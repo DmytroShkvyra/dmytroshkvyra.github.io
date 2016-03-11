@@ -82,7 +82,6 @@ function walsh(n, shift, step){
 
 	var diff = 0;
 	var avg = 0;
-	var sigma = 0;
 	for(var j=1; j<mags.length; j++){
 	  avg += mags[j];
     }
@@ -91,7 +90,7 @@ function walsh(n, shift, step){
 	  diff += Math.pow(mags[j]-avg, 2);
     }
 	diff /= (mags.length - 1);
-	sigma = Math.sqrt(diff);
+	this.sigma = Math.sqrt(diff);
 	for(var j=1; j<mags.length; j++){
 	  res[j] = (mags[j]-avg)/sigma;
     }
