@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+	<title>TODO supply a title</title>
+	<meta charset="windows-1251">
+	<meta name="viewport" content="width=device-width">
+	<script data-turbolinks-track="true" src="/js/walsh.js"></script>
+	<link href="/styles/style.css" media="all" rel="stylesheet" />
+	<script>
+
+
+//var real = new Float32Array([0,0.4,0.4,1,1,1,0.3,0.7,0.6,0.5,0.9,0.8]);
+
+var w = new walsh(128,60,2);
+
+function toggle() {     $("button").toggle();
+                  }
+function play() {
+audioContext = new AudioContext();
+rate = audioContext.sampleRate;  
+
+    var fft = rate/parseInt(document.getElementById("f").value)|0;
+    var fftarr = ((new Array(fft)).fill(0.0,0,fft+1).fill(1,1,50));
+    //var real = new Float32Array(fftarr);
+    var real = w.getWave(parseInt(document.getElementById("sym").value));
+    var imag = new Float32Array(real.length);
+    var hornTable = audioContext.createPeriodicWave(real, imag);  
+  
+  osc = audioContext.createOscillator();
+  osc.setPeriodicWave(hornTable);               
+  osc.frequency.value = parseFloat(document.getElementById("f").value);
+  osc.connect(audioContext.destination);
+  osc.start();
+}
+function stop() {
+  osc.stop();
+  osc.disconnect();
+}
+
+// Stereo
+var channels = 1;
+// Create an empty two second stereo buffer at the
+// sample rate of the AudioContext
+var audioCtx = new AudioContext();
+var frameCount = audioCtx.sampleRate * 2.0;
+
+var myArrayBuffer = audioCtx.createBuffer(channels, frameCount, audioCtx.sampleRate);
+function click1() {
+  // Fill the buffer with white noise;
+  //just random values between -1.0 and 1.0
+  for (var channel = 0; channel < channels; channel++) {
+   // This gives us the actual array that contains the data
+   var nowBuffering = myArrayBuffer.getChannelData(channel);
+   for (var i = 0; i < frameCount; i++) {
+     // Math.random() is in [0; 1.0]
+     // audio needs to be in [-1.0; 1.0]
+     nowBuffering[i] = Math.random() * 2 - 1;
+   }
+  }
+
+  // Get an AudioBufferSourceNode.
+  // This is the AudioNode to use when we want to play an AudioBuffer
+  var source = audioCtx.createBufferSource();
+  // set the buffer in the AudioBufferSourceNode
+  source.buffer = myArrayBuffer;
+  // connect the AudioBufferSourceNode to the
+  // destination so we can hear the sound
+  source.connect(audioCtx.destination);
+  // start the source playing
+  source.start();
+}
+	    
+	</script>    
+    </head>
+    <body>
+	<div>TODO write content</div>
+	<input value="21.533203125" id="f"/>
+	<input value="1" id="sym"/>
+	<input type="button" value="Play" onclick="play();"/>
+	<input type="button" value="Stop" onclick="stop();"/>
+  <input type="button" value="PlayWave" onclick="click1();"/>
+  <a href="https://dmytroshkvyra.github.io/">Back</a>
+    </body>
+</html>
