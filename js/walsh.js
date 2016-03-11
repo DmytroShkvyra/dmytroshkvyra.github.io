@@ -152,6 +152,7 @@ function walsh(n, shift, step){
   }  
 
   walsh.prototype.clearSym = function(){
+	clearTimeout(this.timerId);
 	this.first = undefined;  
   }
   
