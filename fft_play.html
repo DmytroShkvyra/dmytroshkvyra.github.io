@@ -15,16 +15,17 @@ and open the template in the editor.
 
 
 //var real = new Float32Array([0,0.4,0.4,1,1,1,0.3,0.7,0.6,0.5,0.9,0.8]);
+
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = (n != undefined)? n: 128;
-  this.shift = (shift != undefined)? shift: 45;
-  this.step = (step != undefined)? step: 2;
+  this.n = (n !== undefined)? n: 128;
+  this.shift = (shift !== undefined)? shift: 45;
+  this.step = (step !== undefined)? step: 2;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step;
-    var res = new Array(lengthOfFFT).fill(0.5,0,lengthOfFFT);
+    var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     var walshKoefs = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
@@ -80,7 +81,8 @@ function walsh(n, shift, step){
   
   walsh.prototype.decode = function(inputarr){
     var res = {};
-    for(var i=0; i<this.spectrWalsh.length; i++){
+	var mags = new Array(this.spectrWalsh.length).fill(0,0,this.spectrWalsh.length);
+    for(var i=1; i<this.spectrWalsh.length; i++){
       var mag = 0;
 	  var avg = 0;
 	  var c = 0;
@@ -93,21 +95,42 @@ function walsh(n, shift, step){
       for(var j=0; j<this.spectrWalsh[i].length; j++){
         mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
-      res[i]=mag;
+	  mags[i] = mag;
     }
-      
+
+	var diff = 0;
+	var avg = 0;
+	for(var j=1; j<mags.length; j++){
+	  avg += mags[j];
+    }
+	avg /= (mags.length - 1); 
+	for(var j=1; j<mags.length; j++){
+	  diff += Math.pow(mags[j]-avg, 2);
+    }
+	diff /= (mags.length - 1);
+	this.sigma = Math.sqrt(diff);
+	for(var j=1; j<mags.length; j++){
+		if(mags[j]>0){
+			res[j] = (mags[j]-avg)/this.sigma;
+		} else {
+			res[j] = 0;
+		}
+	  
+    }
+	
     return res;
-  };; 
+  }; 
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  
-  this.waves = new Array(n);
-  this.spectrWalsh = new Array(n);
+  this.waves = new Array(this.n);
+  this.spectrWalsh = new Array(this.n);
   for(var i=0; i<this.waves.length; i++){
     this.waves[i] = this.getWave(i);
   }
   
 }
+
 
 var w = new walsh();
 

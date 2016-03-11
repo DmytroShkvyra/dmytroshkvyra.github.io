@@ -7,7 +7,7 @@ function walsh(n, shift, step){
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step;
-    var res = new Array(lengthOfFFT).fill(0.5,0,lengthOfFFT);
+    var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     var walshKoefs = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
