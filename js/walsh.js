@@ -135,24 +135,24 @@ function walsh(n, shift, step){
   walsh.prototype.decodeSequence = function(sym, detected){
     if(this.first === undefined){
 		this.first = sym;
-		clearTimeout(this.timerId)
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
 		this.timerId = setTimeout(this.clearSym, 500 );
 		return;
 	} else if(this.first === sym){
-		clearTimeout(this.timerId)
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
 		this.timerId = setTimeout(this.clearSym, 500 );
 		return;
 	} else {
 		var res = this.encodeMatrix[this.first-1][sym-1];
 		this.first = sym;
-		clearTimeout(this.timerId)
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
 		this.timerId = setTimeout(this.clearSym, 500 );
 		if(detected !== undefined) detected(res);
 	}
   }  
 
   walsh.prototype.clearSym = function(){
-	clearTimeout(this.timerId);
+	if(this.timerId !== undefined) clearTimeout(this.timerId)
 	this.first = undefined;  
   }
   
