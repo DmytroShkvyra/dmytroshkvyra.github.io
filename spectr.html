@@ -87,7 +87,7 @@ and open the template in the editor.
        http://caniuse.com/#feat=audio-api
        */
       {
-        var w = new walsh(128,90,2);
+        var w = new walsh();
         var AudioContext = window.AudioContext ||
           window.webkitAudioContext;
         var audioContext;
@@ -208,11 +208,9 @@ and open the template in the editor.
 		var avg = 0;
 		var c = 0;
         for (var key in decode) {
-		    if(key != '0'){
-				avg +=decode[key];
-				c++;
-			}
-			if(decode[key]>max && key != '0' ){
+			avg +=decode[key];
+			c++;
+			if(decode[key]>max){
 				max = decode[key];
 				sym = key;
 			}
@@ -220,7 +218,7 @@ and open the template in the editor.
 		avg /= c;
 		document.getElementById("walsh0").value = sym;
 		document.getElementById("walsh1").value = max;
-		document.getElementById("walsh2").value = decode[0];
+		//document.getElementById("walsh2").value = decode[0];
 		document.getElementById("walsh3").value = avg;
         document.getElementById("maxFreq").value = maxFreq;
       };

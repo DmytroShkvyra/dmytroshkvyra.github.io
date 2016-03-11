@@ -1,12 +1,12 @@
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = n;
-  this.shift = shift;
-  this.step = step;
+  this.n = (n !== undefined)? n: 128;
+  this.shift = (shift !== undefined)? shift: 45;
+  this.step = (step !== undefined)? step: 2;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
-    var lengthOfFFT = this.shift + 1 + codeArr.length*step;
+    var lengthOfFFT = this.shift + 1 + codeArr.length*this.step;
     var res = new Array(lengthOfFFT).fill(0.5,0,lengthOfFFT);
     var walshKoefs = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     for(var i= 0; i<codeArr.length; i++){
@@ -63,7 +63,8 @@ function walsh(n, shift, step){
   
   walsh.prototype.decode = function(inputarr){
     var res = {};
-    for(var i=0; i<this.spectrWalsh.length; i++){
+	var mags = new Array(this.spectrWalsh.length)
+    for(var i=1; i<this.spectrWalsh.length; i++){
       var mag = 0;
 	  var avg = 0;
 	  var c = 0;
@@ -76,11 +77,23 @@ function walsh(n, shift, step){
       for(var j=0; j<this.spectrWalsh[i].length; j++){
         mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
-      res[i]=mag;
+	  mags[i] = mag;
+	  var diff = 0;
+	  avg = 0
+	  for(var j=1; j<mag[i].length; j++){
+		  avg += mag[i];
+	  }
+	  avg /= (mags.length - 1); 
+	  for(var j=1; j<mag[i].length; j++){
+		  diff += Math.pow(mag[i]-avg, 2);
+	  }
+	  diff /= (mags.length - 1);
+	  mag = Math.sqrt(diff);
+	  res[i]=mag;
     }
       
     return res;
-  };; 
+  }; 
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  

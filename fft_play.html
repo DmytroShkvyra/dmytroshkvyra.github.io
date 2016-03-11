@@ -9,21 +9,21 @@ and open the template in the editor.
 	<title>TODO supply a title</title>
 	<meta charset="windows-1251">
 	<meta name="viewport" content="width=device-width">
-	<script data-turbolinks-track="true" src="/js/walsh.js"></script>
-	<link href="/styles/style.css" media="all" rel="stylesheet" />
+	<!--script data-turbolinks-track="true" src="/js/walsh.js"></script>
+	<link href="/styles/style.css" media="all" rel="stylesheet" /-->
 	<script>
 
 
 //var real = new Float32Array([0,0.4,0.4,1,1,1,0.3,0.7,0.6,0.5,0.9,0.8]);
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = n;
-  this.shift = shift;
-  this.step = step;
+  this.n = (n != undefined)? n: 128;
+  this.shift = (shift != undefined)? shift: 45;
+  this.step = (step != undefined)? step: 2;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
-    var lengthOfFFT = this.shift + 1 + codeArr.length*step;
+    var lengthOfFFT = this.shift + 1 + codeArr.length*this.step;
     var res = new Array(lengthOfFFT).fill(0.5,0,lengthOfFFT);
     var walshKoefs = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     for(var i= 0; i<codeArr.length; i++){
@@ -107,9 +107,9 @@ function walsh(n, shift, step){
     this.waves[i] = this.getWave(i);
   }
   
-};
+}
 
-var w = new walsh(128,90,2);
+var w = new walsh();
 
 function toggle() {     $("button").toggle();
                   }
