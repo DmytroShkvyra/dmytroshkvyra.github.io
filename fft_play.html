@@ -115,21 +115,45 @@ function toggle() {     $("button").toggle();
                   }
 function play() {
 audioContext = new AudioContext();
-osc = audioContext.createOscillator();
-osc.frequency.value = parseFloat(document.getElementById("f").value);
+
 rate = audioContext.sampleRate;  
+var syms = document.getElementById("sym").value.split(" ");
+var waves = [];
 
     var fft = rate/parseInt(document.getElementById("f").value)|0;
     var fftarr = ((new Array(fft)).fill(0.0,0,fft+1).fill(1,1,50));
     //var real = new Float32Array(fftarr);
-    var real = w.getWave(parseInt(document.getElementById("sym").value));
+ 
+  
+  for(var i=0; i<syms.length; i++){
+    var real = w.getWave(parseInt(syms[i]));
     var imag = new Float32Array(real.length);
-    var hornTable = audioContext.createPeriodicWave(real, imag);  
+    var hornTable = audioContext.createPeriodicWave(real, imag); 
+    waves.push(hornTable);	
+  }
+
+    var i = 0;
+	var osc; 
+	var timerId = setTimeout(function run() {
+	    if (waves.length === i) {
+			clearTimeout(timerId);
+			osc.stop();
+			osc.disconnect();
+			return;
+	    } else if(i != 0) {
+			osc.stop();
+			osc.disconnect();
+		}
+        osc = audioContext.createOscillator();
+        osc.frequency.value = parseFloat(document.getElementById("f").value);		
+        osc.setPeriodicWave(waves[i]);               
+		osc.connect(audioContext.destination);
+        osc.start();	    
+	    timerId = setTimeout(run, 1000 );
+	    i++;
+	}, 1000 ) ;
   
-  
-  osc.setPeriodicWave(hornTable);               
-  osc.connect(audioContext.destination);
-  osc.start();
+
 }
 function stop() {
   osc.stop();
@@ -174,7 +198,7 @@ function click1() {
     <body>
 	<div>TODO write content</div>
 	<input value="21.533203125" id="f"/>
-	<input value="1" id="sym"/>
+	<input value="1 2 3 4 5" id="sym"/>
 	<input type="button" value="Play" onclick="play();"/>
 	<input type="button" value="Stop" onclick="stop();"/>
   <input type="button" value="PlayWave" onclick="click1();"/>
