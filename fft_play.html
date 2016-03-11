@@ -184,7 +184,7 @@ function play() {
 audioContext = new AudioContext();
 
 rate = audioContext.sampleRate;  
-var syms = document.getElementById("sym").value.split(" ");
+var syms = w.encode(document.getElementById("sym").value.split(" "));
 var waves = [];
 
     var fft = rate/parseInt(document.getElementById("f").value)|0;
