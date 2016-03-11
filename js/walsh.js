@@ -129,7 +129,7 @@ function walsh(n, shift, step){
 			}
 		}
 	}
-    return res;
+    return (outputarr.length < 1)? []: res;
   }
 
   walsh.prototype.decodeSequence = function(sym, detected){
