@@ -216,7 +216,7 @@ and open the template in the editor.
 			}
         }
 		avg /= c;
-		document.getElementById("walsh0").value = (max > 4)? sym : '';
+		document.getElementById("walsh0").value = document.getElementById("walsh0").value + ((max > 4)? sym : '') +',';
 		document.getElementById("walsh1").value = max;
 		document.getElementById("walsh2").value = w.sigma;
 		document.getElementById("walsh3").value = avg;
@@ -410,7 +410,7 @@ and open the template in the editor.
     </div>
 
     <div id="controls">
-      <p><input id="walsh0"/></p>
+      <p><input id="walsh0" width="100%"/></p>
 	  <p><input id="walsh1"/></p>
 	  <p><input id="walsh2"/></p>
 	  <p><input id="walsh3"/></p>
