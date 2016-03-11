@@ -152,7 +152,7 @@ function walsh(n, shift, step){
   }  
 
   walsh.prototype.clearSym = function(){
-	  
+	this.first = undefined;  
   }
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
