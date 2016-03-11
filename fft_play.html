@@ -120,8 +120,52 @@ function walsh(n, shift, step){
 	
     return res;
   }; 
+
+  walsh.prototype.encode = function(outputarr){
+	var res = [1];
+	this.perv = 0;
+	for(var i=0; i<outputarr.length; i++){
+		var row = this.encodeMatrix[this.perv];
+		for(var j=0; j<row.length; j++){
+			if(outputarr[i]==row[j]){
+				this.perv = j;
+				res.push(j+1);
+				break;
+			}
+		}
+	}
+    return res;
+  }
+
+  walsh.prototype.decodeSequence = function(sym, detected){
+    if(this.first === undefined){
+		this.first = sym;
+		return;
+	} else if(this.first === sym){
+		return;
+	} else {
+		var res = this.encodeMatrix[this.first-1][sym-1];
+		this.first = sym;
+		if(detected !== undefined) detected(res);
+	}
+  }
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
+  
+  this.encodeMatrix = this.create2DArr(this.n -1 );
+  for(var i=0; i<this.encodeMatrix.length; i++){
+    var c = 1;
+	for(var j=0; j<this.encodeMatrix.length; j++){
+		if(i==j){
+			this.encodeMatrix[i][j] = 0;
+		} else {
+		    this.encodeMatrix[i][j] = c++;
+		} 
+	}
+  
+  }
+  
+  
  
   this.waves = new Array(this.n);
   this.spectrWalsh = new Array(this.n);
