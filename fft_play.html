@@ -183,8 +183,14 @@ function toggle() {     $("button").toggle();
 function play() {
 audioContext = new AudioContext();
 
-rate = audioContext.sampleRate;  
-var syms = w.encode(document.getElementById("sym").value.split(" "));
+rate = audioContext.sampleRate; 
+var chars = document.getElementById("sym").value.split('');
+var codes = [];
+for(var i=0; i<chars.length;i++){
+	codes.push(chars[i].charCodeAt(0)-34);
+} 
+
+var syms = w.encode(codes);
 var waves = [];
 
     var fft = rate/parseInt(document.getElementById("f").value)|0;
@@ -216,9 +222,9 @@ var waves = [];
         osc.setPeriodicWave(waves[i]);               
 		osc.connect(audioContext.destination);
         osc.start();	    
-	    timerId = setTimeout(run, 100 );
+	    timerId = setTimeout(run, 150 );
 	    i++;
-	}, 100 ) ;
+	}, 150 ) ;
   
 
 }

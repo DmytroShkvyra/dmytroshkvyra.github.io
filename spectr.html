@@ -229,7 +229,7 @@ and open the template in the editor.
       };
       
 	  function detected(sym){
-		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (sym +',');
+		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(sym+34));
 	  }
 
       function load(e) {
