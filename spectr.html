@@ -173,7 +173,8 @@ and open the template in the editor.
 
 
       function updateFrame(frequencyData, step) {
-	  /*
+		if(document.getElementById("spectr").checked){
+	  
         var myNode = document.getElementById("bar");
         var needrename = false;
         var maxFreq;
@@ -202,7 +203,9 @@ and open the template in the editor.
             maxFreq = i * step;
             break;
           }
-        }*/
+        }
+
+		}
         var decode = w.decode(frequencyData)
 		var max = 0;
 		var sym = 0;
@@ -433,6 +436,7 @@ and open the template in the editor.
       </p>
       <canvas id="canvas" width="400" height ="200"></canvas>
       <p>
+		<input type="checkbox" id='spectr' value='Show spectr' checked='true'>
         <input id="frequencySlider" title="Frequency" type="range" min="0" max="10000" value="3500" />
         <input id="qSlider" title="Q" disabled type="range" min="1" max="100" value="10" />
         <input id="gainSlider" title="Gain" type="range" min="1" max="100" value="50" />
