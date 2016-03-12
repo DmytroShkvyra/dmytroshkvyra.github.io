@@ -116,22 +116,47 @@ function walsh(n, shift, step){
   
   }  
 
+  // Encode sequece of sym to prevent repeating
   walsh.prototype.encode = function(outputarr){
-	var res = [1];
+	var res = [];
 	this.perv = 0;
 	for(var i=0; i<outputarr.length; i++){
-		var row = this.encodeMatrix[this.perv];
-		for(var j=0; j<row.length; j++){
-			if(outputarr[i]==row[j]){
+		var sym = outputarr[i]+1;
+        if(sym > this.encodeMatrix.length - 1) throw ("There have not to be value more than " + (this.encodeMatrix.length - 2))
+	    if(i==0){
+				res.push(sym);
+				this.perv = sym;			
+			/*if(outputarr[i]<this.encodeMatrix.length-3) {
+				res.push(sym +2);
+				this.perv = sym + 2;
+			}
+			else {
+				res.push((sym+1) - (this.encodeMatrix.length-1));
+                this.perv = ((sym+1) - (this.encodeMatrix.length-1));
+			}*/
+		}
+		for(var j=0; j<this.encodeMatrix.length; j++){
+			if(sym == this.encodeMatrix[j][this.perv]){
 				this.perv = j;
-				res.push(j+1);
+				res.push(j);
 				break;
 			}
 		}
 	}
-    return (outputarr.length < 1)? []: res;
+    return res;
   }
 
+  walsh.prototype.decodeSequenceTest = function(arr){
+	var res = [];
+	function addToRes(sym){
+		res.push(sym);
+	}
+	for(var i=0; i<arr.length; i++){
+		this.decodeSequence(arr[i], addToRes);
+	}
+	return res;
+  }
+  
   walsh.prototype.decodeSequence = function(sym, detected){
     if(this.first === undefined){
 		this.first = sym;
@@ -143,17 +168,17 @@ function walsh(n, shift, step){
 		this.timerId = setTimeout(this.clearSym, 50 );
 		return;
 	} else {
-		var res = this.encodeMatrix[this.first-1][sym-1];
+		var res = this.encodeMatrix[sym][this.first];
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
 		this.timerId = setTimeout(this.clearSym, 50 );
-		if(detected !== undefined) detected(res);
+		if(detected !== undefined) detected(res-1);
 	}
   }  
 
   walsh.prototype.clearSym = function(){
-	if(this.timerId !== undefined) clearTimeout(this.timerId)
-	this.first = undefined;  
+	if(walsh.prototype.this.timerId !== undefined) clearTimeout(walsh.prototype.this.timerId)
+	walsh.prototype.this.first = undefined;  
   }
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
