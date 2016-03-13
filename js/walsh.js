@@ -1,6 +1,6 @@
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = (n !== undefined)? n: 64;
+  this.n = (n !== undefined)? n: 32;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
   
@@ -71,10 +71,10 @@ function walsh(n, shift, step){
       var mag = 0;
 	  var avg = 0;
       for(var j=0; j<this.matrix.length; j++){
-        //var positive = inputarr[this.shift + 1 + this.step*j*2];
-		//var negative = inputarr[this.shift + 1 + this.step*j*2+this.step];
-        var positive = inputarr[this.shift + this.step*j*2];
-		var negative = inputarr[this.shift + this.step*j*2+this.step];
+        var positive = inputarr[this.shift + 1 + this.step*j*2];
+		var negative = inputarr[this.shift + 1 + this.step*j*2+this.step];
+        //var positive = inputarr[this.shift + this.step*j*2];
+		//var negative = inputarr[this.shift + this.step*j*2+this.step];
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
