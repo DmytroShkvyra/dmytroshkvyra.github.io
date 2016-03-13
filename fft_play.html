@@ -18,7 +18,7 @@ and open the template in the editor.
 
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = (n !== undefined)? n: 64;
+  this.n = (n !== undefined)? n: 32;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 2;
   
@@ -239,7 +239,7 @@ rate = audioContext.sampleRate;
 var chars = document.getElementById("sym").value.split('');
 var codes = [];
 for(var i=0; i<chars.length;i++){
-	codes.push(chars[i].charCodeAt(0)-34);
+	codes.push(chars[i].charCodeAt(0)-65);
 } 
 
 var syms = w.encode(codes);
@@ -323,7 +323,7 @@ function click1() {
     <body>
 	<div>TODO write content</div>
 	<input value="21.533203125" id="f"/>
-	<input value="123456789" id="sym"/>
+	<input value="ABCDEFGHJLMNOP" id="sym"/>
 	<input type="button" value="Play" onclick="play();"/>
 	<!--input type="button" value="Stop" onclick="stop();"/-->
   <input type="button" value="PlayWave" onclick="click1();"/>
