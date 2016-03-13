@@ -159,7 +159,15 @@ function walsh(n, shift, step){
 		this.timerId = setTimeout(this.clearSym, 100 );
 		return;
 	} else {
-		var res = this.encodeMatrix[sym][this.first];
+        var res;
+		try{
+			res = this.encodeMatrix[sym][this.first];
+		} catch (err) {
+			this.first = sym;
+			if(this.timerId !== undefined) clearTimeout(this.timerId)
+			this.timerId = setTimeout(this.clearSym, 100 );
+			return;
+		}
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
 		this.timerId = setTimeout(this.clearSym, 100 );
