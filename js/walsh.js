@@ -67,7 +67,7 @@ function walsh(n, shift, step){
   walsh.prototype.decode = function(inputarr){
     var res = {};
 	var mags = new Array(this.matrix.length).fill(0,0,this.matrix.length);
-    for(var i=1; i<this.matrix.length; i++){
+    for(var i=0; i<this.matrix.length; i++){
       var mag = 0;
       for(var j=0; j<this.matrix.length; j++){
         var positive = inputarr[this.shift + 1 + this.step*j*2];
@@ -77,7 +77,7 @@ function walsh(n, shift, step){
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
-	  mags[i-1] = (mag >0 )? mag : 0;
+	  mags[i] = (mag >0 )? mag : 0;
     }
 
 	var diff = 0;
