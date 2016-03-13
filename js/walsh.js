@@ -77,7 +77,7 @@ function walsh(n, shift, step){
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
-	  mags[i] = (mag >0 )? mag : 0;
+	  mags[i-1] = (mag >0 )? mag : 0;
     }
 
 	var diff = 0;
