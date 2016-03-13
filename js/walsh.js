@@ -6,14 +6,17 @@ function walsh(n, shift, step){
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
-    var lengthOfFFT = this.shift + 1 + codeArr.length*this.step;
+    var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
     var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
-    var walshKoefs = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
+    var walshKoefs = new Array(this.shift + 1 + codeArr.length*this.step).fill(0,0,this.shift + 1 + codeArr.length*this.step);
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
-      if (codeArr[i] === 1) val=1;
-      else if (codeArr[i] === -1) val=0;
-      res[this.shift + 1 + this.step*i] = val;
+      if (codeArr[i] === 1) {
+		res[this.shift + 1 + this.step*i*2] = 1
+      }
+      else if (codeArr[i] === -1) {
+		res[this.shift + 1 + this.step*i*2+this.step] = 1
+	 }
       walshKoefs[this.shift + 1 + this.step*i] = codeArr[i];
     }
     this.spectrWalsh[code] = walshKoefs;
@@ -63,19 +66,25 @@ function walsh(n, shift, step){
   
   walsh.prototype.decode = function(inputarr){
     var res = {};
-	var mags = new Array(this.spectrWalsh.length).fill(0,0,this.spectrWalsh.length);
-    for(var i=1; i<this.spectrWalsh.length; i++){
+	var mags = new Array(this.matrix.length).fill(0,0,this.matrix.length);
+    for(var i=1; i<this.matrix.length; i++){
       var mag = 0;
 	  var avg = 0;
 	  var c = 0;
-	  for(c=0; c<this.spectrWalsh[i].length; c++){
+      //Average magnitude
+	  /*for(c=0; c<this.spectrWalsh[i].length; c++){
         if(this.spectrWalsh[i][c] !== 0){
 			avg += inputarr[c];
 		}
       }
-	  avg /= c;
-      for(var j=0; j<this.spectrWalsh[i].length; j++){
-        mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
+	  avg /= c;*/
+
+      for(var j=0; j<this.matrix.length; j++){
+        var positive = inputarr[this.shift + 1 + this.step*i*2];
+		var negative = inputarr[this.shift + 1 + this.step*i*2+this.step];
+		var bit = positive-negative;
+		mag += this.matrix[i][j]*bit;
+        //mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
 	  mags[i] = mag;
     }
@@ -126,14 +135,6 @@ function walsh(n, shift, step){
 	    if(i==0){
 				res.push(sym);
 				this.perv = sym;			
-			/*if(outputarr[i]<this.encodeMatrix.length-3) {
-				res.push(sym +2);
-				this.perv = sym + 2;
-			}
-			else {
-				res.push((sym+1) - (this.encodeMatrix.length-1));
-                this.perv = ((sym+1) - (this.encodeMatrix.length-1));
-			}*/
 		}
 		for(var j=0; j<this.encodeMatrix.length; j++){
 			if(sym == this.encodeMatrix[j][this.perv]){
