@@ -20,7 +20,7 @@ function walsh(n, shift, step){
   walsh.prototype.this = this;
   this.n = (n !== undefined)? n: 32;
   this.shift = (shift !== undefined)? shift: 45;
-  this.step = (step !== undefined)? step: 2;
+  this.step = (step !== undefined)? step: 3;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
@@ -274,9 +274,9 @@ var waves = [];
         osc.setPeriodicWave(waves[i]);               
 		osc.connect(audioContext.destination);
         osc.start();	    
-	    timerId = setTimeout(run, 20000 );
+	    timerId = setTimeout(run, 200 );
 	    i++;
-	}, 20000 ) ;
+	}, 200 ) ;
   
 
 }
