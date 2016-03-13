@@ -1,6 +1,6 @@
 function walsh(n, shift, step){
   walsh.prototype.this = this;
-  this.n = (n !== undefined)? n: 32;
+  this.n = (n !== undefined)? n: 64;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
   
