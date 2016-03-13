@@ -69,7 +69,6 @@ function walsh(n, shift, step){
 	var mags = new Array(this.matrix.length).fill(0,0,this.matrix.length);
     for(var i=1; i<this.matrix.length; i++){
       var mag = 0;
-	  var avg = 0;
       for(var j=0; j<this.matrix.length; j++){
         var positive = inputarr[this.shift + 1 + this.step*j*2];
 		var negative = inputarr[this.shift + 1 + this.step*j*2+this.step];
@@ -78,19 +77,25 @@ function walsh(n, shift, step){
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
-	  mags[i] = mag;
+	  mags[i] = (mag >0 )? mag : 0;
     }
 
 	var diff = 0;
 	var avg = 0;
-	for(var j=1; j<mags.length; j++){
-	  avg += mags[j];
+	var c = 0;
+	for(var j=0; j<mags.length; j++){
+		if(mags[j]>0){
+			avg += mags[j];
+			c++;
+		}
     }
-	avg /= (mags.length - 1); 
-	for(var j=1; j<mags.length; j++){
-	  diff += Math.pow(mags[j]-avg, 2);
+	avg /= c; 
+	for(var j=0; j<mags.length; j++){
+		if(mags[j]>0){
+			diff += Math.pow(mags[j]-avg, 2);
+		}
     }
-	diff /= (mags.length - 1);
+	diff /= c;
 	this.sigma = Math.sqrt(diff);
 	for(var j=1; j<mags.length; j++){
 		if(mags[j]>0){
