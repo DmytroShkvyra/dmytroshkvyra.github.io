@@ -154,11 +154,11 @@ function walsh(n, shift, step){
     if(this.first === undefined){
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 100 );
+		this.timerId = setTimeout(this.clearSym, 200 );
 		return;
 	} else if(this.first === sym){
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 100 );
+		this.timerId = setTimeout(this.clearSym, 200 );
 		return;
 	} else {
         var res;
@@ -167,12 +167,12 @@ function walsh(n, shift, step){
 		} catch (err) {
 			this.first = sym;
 			if(this.timerId !== undefined) clearTimeout(this.timerId)
-			this.timerId = setTimeout(this.clearSym, 100 );
+			this.timerId = setTimeout(this.clearSym, 200 );
 			return;
 		}
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 100 );
+		this.timerId = setTimeout(this.clearSym, 200 );
 		if(detected !== undefined) detected(res-1);
 	}
   }  
