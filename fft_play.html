@@ -229,11 +229,13 @@ this.first[i*2+1]=2;
 }
 
 var w = new walsh();
+var audioContext = new AudioContext();
+
 
 function toggle() {     $("button").toggle();
                   }
 function play() {
-audioContext = new AudioContext();
+
 
 rate = audioContext.sampleRate; 
 var chars = document.getElementById("sym").value.split('');
@@ -274,9 +276,9 @@ var waves = [];
         osc.setPeriodicWave(waves[i]);               
 		osc.connect(audioContext.destination);
         osc.start();	    
-	    timerId = setTimeout(run, 200 );
+	    timerId = setTimeout(run, 100 );
 	    i++;
-	}, 200 ) ;
+	}, 100 ) ;
   
 
 }
