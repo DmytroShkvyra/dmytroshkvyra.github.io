@@ -85,7 +85,7 @@ var frameCount = audioCtx.sampleRate * 2.0;
 var myArrayBuffer = audioCtx.createBuffer(channels, frameCount, audioCtx.sampleRate);
 function click1() {
   var control = document.getElementById("sym");
-  for(var i=0; i<63; i++){
+  for(var i=0; i<62; i++){
 	control.value = control.value + String.fromCharCode(i+65)
 
   }
