@@ -70,25 +70,15 @@ function walsh(n, shift, step){
     for(var i=1; i<this.matrix.length; i++){
       var mag = 0;
 	  var avg = 0;
-	  var c = 0;
-      //Average magnitude
-	  /*for(c=0; c<this.spectrWalsh[i].length; c++){
-        if(this.spectrWalsh[i][c] !== 0){
-			avg += inputarr[c];
-		}
-      }
-	  avg /= c;*/
-
       for(var j=0; j<this.matrix.length; j++){
         var positive = inputarr[this.shift + 1 + this.step*i*2];
 		var negative = inputarr[this.shift + 1 + this.step*i*2+this.step];
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
-        //mag += this.spectrWalsh[i][j]*(inputarr[j]-avg);
       }
 	  mags[i] = mag;
     }
-
+concole.log(mags);
 	var diff = 0;
 	var avg = 0;
 	for(var j=1; j<mags.length; j++){
