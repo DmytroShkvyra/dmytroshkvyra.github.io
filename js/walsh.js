@@ -78,7 +78,7 @@ function walsh(n, shift, step){
       }
 	  mags[i] = mag;
     }
-concole.log(mags);
+console.log(mags);
 	var diff = 0;
 	var avg = 0;
 	for(var j=1; j<mags.length; j++){
