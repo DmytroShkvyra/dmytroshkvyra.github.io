@@ -213,7 +213,7 @@ and open the template in the editor.
 		var c = 0;
         for (var key in decode) {
 			avg +=decode[key];
-			c++;
+			if(decode[key]>0) c++;
 			if(decode[key]>max){
 				max = decode[key];
 				sym = key;
