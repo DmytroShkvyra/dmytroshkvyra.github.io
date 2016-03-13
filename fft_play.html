@@ -274,9 +274,9 @@ var waves = [];
         osc.setPeriodicWave(waves[i]);               
 		osc.connect(audioContext.destination);
         osc.start();	    
-	    timerId = setTimeout(run, 1000 );
+	    timerId = setTimeout(run, 200 );
 	    i++;
-	}, 1000 ) ;
+	}, 200 ) ;
   
 
 }
@@ -323,7 +323,7 @@ function click1() {
     <body>
 	<div>TODO write content</div>
 	<input value="21.533203125" id="f"/>
-	<input value="1 2 3 4 5" id="sym"/>
+	<input value="123456789" id="sym"/>
 	<input type="button" value="Play" onclick="play();"/>
 	<!--input type="button" value="Stop" onclick="stop();"/-->
   <input type="button" value="PlayWave" onclick="click1();"/>

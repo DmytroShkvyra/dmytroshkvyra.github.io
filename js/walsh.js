@@ -71,8 +71,8 @@ function walsh(n, shift, step){
       var mag = 0;
 	  var avg = 0;
       for(var j=0; j<this.matrix.length; j++){
-        var positive = inputarr[this.shift + 0 + this.step*j*2];
-		var negative = inputarr[this.shift + 0 + this.step*j*2+this.step];
+        var positive = inputarr[this.shift + 1 + this.step*j*2];
+		var negative = inputarr[this.shift + 1 + this.step*j*2+this.step];
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
