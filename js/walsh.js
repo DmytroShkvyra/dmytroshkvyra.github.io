@@ -8,18 +8,16 @@ function walsh(n, shift, step){
     var codeArr = this.matrix[code];
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
     var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
-    var walshKoefs = new Array(this.shift + 1 + codeArr.length*this.step).fill(0,0,this.shift + 1 + codeArr.length*this.step);
+    
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
-      if (codeArr[i] === 1) {
+      if (codeArr[i] > 0) {
 		res[this.shift + 1 + this.step*i*2] = 1
       }
-      else if (codeArr[i] === -1) {
+      else if (codeArr[i] < 0) {
 		res[this.shift + 1 + this.step*i*2+this.step] = 1
-	 }
-      walshKoefs[this.shift + 1 + this.step*i] = codeArr[i];
+	  }
     }
-    this.spectrWalsh[code] = walshKoefs;
     return new Float32Array(res);
   };
   
@@ -185,7 +183,6 @@ function walsh(n, shift, step){
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  
   this.waves = new Array(this.n);
-  this.spectrWalsh = new Array(this.n);
   for(var i=0; i<this.waves.length; i++){
     this.waves[i] = this.getWave(i);
   }
