@@ -1,8 +1,9 @@
-function walsh(n, shift, step){
+function walsh(n, shift, step, tresholdTimeout){
   walsh.prototype.this = this;
   this.n = (n !== undefined)? n: 64;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
+  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
   
   walsh.prototype.getWave = function(code){
     var codeArr = this.matrix[code];
@@ -152,11 +153,11 @@ function walsh(n, shift, step){
     if(this.first === undefined){
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else if(this.first === sym){
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else {
         var res;
@@ -165,12 +166,12 @@ function walsh(n, shift, step){
 		} catch (err) {
 			this.first = sym;
 			if(this.timerId !== undefined) clearTimeout(this.timerId)
-			this.timerId = setTimeout(this.clearSym, 200 );
+			this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 			return;
 		}
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, 200 );
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		if(detected !== undefined) detected(res-1);
 	}
   }  
