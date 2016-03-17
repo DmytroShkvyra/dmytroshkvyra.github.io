@@ -1,8 +1,9 @@
-function walsh(n, shift, step, tresholdTimeout){
+function walsh(n, shift, step, dimension,  tresholdTimeout){
   walsh.prototype.this = this;
   this.n = (n !== undefined)? n: 64;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
+  this.dimension = (dimension !== undefined)? dimension : 2;
   this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
   
   walsh.prototype.getWave = function(code){
@@ -71,8 +72,6 @@ function walsh(n, shift, step, tresholdTimeout){
       for(var j=0; j<this.matrix.length; j++){
         var positive = inputarr[this.shift + 1 + this.step*j*2];
 		var negative = inputarr[this.shift + 1 + this.step*j*2+this.step];
-        //var positive = inputarr[this.shift + this.step*j*2];
-		//var negative = inputarr[this.shift + this.step*j*2+this.step];
 		var bit = positive-negative;
 		mag += this.matrix[i][j]*bit;
       }
@@ -103,7 +102,7 @@ function walsh(n, shift, step, tresholdTimeout){
     return res;
   };
 
-  this.encodeMatrix = this.create2DArr(this.n -1 );
+  this.encodeMatrix = this.create2DArr(Math.pow(this.n/this.dimension, this.dimension));
   for(var i=0; i<this.encodeMatrix.length; i++){
     var c = 1;
 	for(var j=0; j<this.encodeMatrix.length; j++){
@@ -122,7 +121,7 @@ function walsh(n, shift, step, tresholdTimeout){
 	this.perv = 0;
 	for(var i=0; i<outputarr.length; i++){
 		var sym = outputarr[i]+1;
-        if(sym > this.encodeMatrix.length - 1) throw ("There have not to be value more than " + (this.encodeMatrix.length - 2))
+        if(sym > this.encodeMatrix.length - 1) throw ("There have not to be value more than " + (this.encodeMatrix.length - 1))
 	    if(i==0){
 				res.push(sym);
 				this.perv = sym;			
