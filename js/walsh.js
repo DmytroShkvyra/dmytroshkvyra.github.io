@@ -185,12 +185,12 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   walsh.prototype.decodeSequence = function(sym, detected){
     if(this.first === undefined){
 		this.first = sym;
-		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		//if(this.timerId !== undefined) clearTimeout(this.timerId)
+		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else if(this.first === sym){
-		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		//if(this.timerId !== undefined) clearTimeout(this.timerId)
+		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else {
         var res;
@@ -200,8 +200,8 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			res = sym;
 		}
 		this.first = sym;
-		if(this.timerId !== undefined) clearTimeout(this.timerId)
-		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		//if(this.timerId !== undefined) clearTimeout(this.timerId)
+		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		if(detected !== undefined) detected(res-1);
 	}
   }  
