@@ -207,28 +207,15 @@ and open the template in the editor.
 
 		}
         var decode = w.decode(frequencyData)
-		var max = 0;
-		var sym = 0;
-		var avg = 0;
-		var c = 0;
-        for (var key in decode) {
-			avg +=decode[key];
-			if(decode[key]>0) c++;
-			if(decode[key]>max){
-				max = decode[key];
-				sym = key;
-			}
-        }
-		avg /= c;
-		if(max > 3.9){
 
+		if(decode !== undefined){
 			w.decodeSequence(sym, detected);
 		}
 
-		document.getElementById("walsh1").value = max;
+		/*document.getElementById("walsh1").value = max;
 		document.getElementById("walsh2").value = w.sigma;
 		document.getElementById("walsh3").value = avg;
-        document.getElementById("maxFreq").value = maxFreq;
+        document.getElementById("maxFreq").value = maxFreq;*/
       };
       
 	  function detected(sym){

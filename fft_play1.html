@@ -19,26 +19,37 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.n = (n !== undefined)? n: 64;
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
-  this.dimension = (dimension !== undefined)? dimension : 1;
+  this.dimension = (dimension !== undefined)? dimension : 2;
   this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
+  this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
+  this.dimesionLength = this.maxCodeLength/this.dimension|0;
+  this.maxSigma = 3.9
   
   walsh.prototype.getCodes = function(code){
-    var maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
-    var dimesionLength = maxCodeLength/this.dimension|0;
     var codeBin = code.toString(2);
-    if(codeBin.length < maxCodeLength){
-		codeBin = '0'.repeat(maxCodeLength - codeBin.length) + codeBin;
+    if(codeBin.length < this.maxCodeLength){
+		codeBin = '0'.repeat(this.maxCodeLength - codeBin.length) + codeBin;
+	}else if(codeBin.length > this.maxCodeLength){
+		codeBin = codeBin.substr(codeBin.length - this.maxCodeLength, this.maxCodeLength)
 	}
     var res = [];
     for(var i=0; i<this.dimension; i++){
-		res.push(parseInt(codeBin.substr(i*dimesionLength, dimesionLength), 2));
+		res.push(parseInt(codeBin.substr(i*this.dimesionLength, this.dimesionLength), 2));
 	}
     
 	return res;
   }	
   
   walsh.prototype.getWave = function(code){
-    var codeArr = this.matrix[code];
+    var codeArr = new Array(this.matrix.length).fill(0,0,this.matrix.length);
+    var codes = this.getCodes(code);
+    for(var i=0; i<codes.length; i++){
+        var currentCode = this.matrix[codes[i] + (i*(this.matrix.length/this.dimension|0))];
+		for(var j=0;j<codeArr.length;j++){
+			codeArr[j] = codeArr[j] + currentCode[j];
+		}
+	}
+	
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
     var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
     
@@ -130,21 +141,27 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		res[j] = (mags[j]> avg)? (mags[j]-avg)/this.sigma : 0;  
     }
 	
-    return res;
-  };
-
-  this.encodeMatrix = this.create2DArr(Math.pow(this.n/this.dimension, this.dimension));
-  for(var i=0; i<this.encodeMatrix.length; i++){
-    var c = 1;
-	for(var j=0; j<this.encodeMatrix.length; j++){
-		if(i==j){
-			this.encodeMatrix[j][i] = 0;
-		} else {
-		    this.encodeMatrix[j][i] = c++;
-		} 
+    var codeStr = '';
+	for (var i=0; i<this.dimension; i++){
+		var maxMagn = 0;
+		var codeBin;
+		for(var j=0; j<res.length/this.dimension|0; j++){
+			if((res[j+i*(res.length/this.dimension|0)]>maxMagn) && res[j+i*(res.length/this.dimension|0)]>this.maxSigma){
+				maxMagn = res[j+i*(res.length/this.dimension|0)];
+				codeBin = j+i*(res.length/this.dimension|0);
+			}
+		}
+		if(codeBin === undefined) return undefined;
+		codeBin = codeBin.toString(2)
+		if(codeBin.length < this.maxCodeLength){
+			codeBin = '0'.repeat(this.maxCodeLength - codeBin.length) + codeBin;
+		}
+		
+		codeStr = codeStr+codeBin;
 	}
-  
-  }   
+
+    return parseInt(codeStr,2);
+  };
 
   // Encode sequece of sym to prevent repeating
   walsh.prototype.encode = function(outputarr){
@@ -152,18 +169,20 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 	this.perv = 0;
 	for(var i=0; i<outputarr.length; i++){
 		var sym = outputarr[i]+1;
-        if(sym > this.encodeMatrix.length) throw ("There have not to be value more than " + (this.encodeMatrix.length - 1))
+        if(sym > Math.pow(this.n/this.dimension, this.dimension)) throw ("There have not to be value more than " + (Math.pow(this.n/this.dimension, this.dimension) - 1))
 	    if(i==0){
-				res.push(sym);
-				this.perv = sym;			
+			res.push(sym);
+			this.perv = sym;			
 		}
-		for(var j=0; j<this.encodeMatrix.length; j++){
-			if(sym == this.encodeMatrix[j][this.perv]){
-				this.perv = j;
-				res.push(j);
-				break;
-			}
+		if(sym>this.perv){
+			this.perv = sym;
+			res.push(sym);			
+		} else {
+            sym -= 1;
+			this.perv = sym;
+			res.push(sym);	
 		}
+
 	}
     return res;
   }
@@ -191,13 +210,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		return;
 	} else {
         var res;
-		try{
-			res = this.encodeMatrix[sym][this.first];
-		} catch (err) {
-			this.first = sym;
-			if(this.timerId !== undefined) clearTimeout(this.timerId)
-			this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
-			return;
+		if(this.first>sym){
+			res = sym+1;
+		} else {
+			res = sym;
 		}
 		this.first = sym;
 		if(this.timerId !== undefined) clearTimeout(this.timerId)
@@ -213,10 +229,6 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   
   this.matrix = this.createAdamar([[1,1],[1,-1]]);
  
-  this.waves = new Array(this.n);
-  for(var i=0; i<this.waves.length; i++){
-    this.waves[i] = this.getWave(i);
-  }
   
 }
 var w = new walsh();
