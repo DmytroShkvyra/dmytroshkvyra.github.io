@@ -168,6 +168,7 @@ and open the template in the editor.
         biquadFilter.gain.value = 20;
         scriptProcessorNode = audioContext.createScriptProcessor(1024, 1, 1);
 		scriptProcessorNode.onaudioprocess = function(audioProcessingEvent){
+			var frequencyData = new Uint8Array(analyser.frequencyBinCount);
 			analyser.getByteFrequencyData(frequencyData);
 			var decode = w.decode(frequencyData);
 			if(decode !== undefined){
