@@ -251,8 +251,8 @@ function play() {
 rate = audioContext.sampleRate; 
 var chars = document.getElementById("sym").value.split('');
 var codes = [];
-for(var i=0; i<chars.length/2|0;i++){
-	codes.push(parseInt((chars[i*2].charCodeAt(0)-64).toString(2)+(chars[i*2+1].charCodeAt(0)-64).toString(2),2));
+for(var i=0; i<chars.length;i++){
+	codes.push(chars[i].charCodeAt(0));
 } 
 
 var syms = w.encode(codes);
