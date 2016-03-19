@@ -213,8 +213,14 @@ and open the template in the editor.
             break;
           }
         }
-
+		
 		}
+			var decode = w.decode(frequencyData);
+			if(decode !== undefined){
+				//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(decode));
+				w.decodeSequence(decode, detected);
+			}		
+		
       };
       
 	  function detected(sym){
