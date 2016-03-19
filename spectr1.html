@@ -218,7 +218,9 @@ and open the template in the editor.
       };
       
 	  function detected(sym){
-		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(sym));
+	    String.fromCharCode(parseInt(sym.toString(2).substr(0,7),2),parseInt(sym.toString(2).substr(7,7),2))
+		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(parseInt(sym.toString(2).substr(0,7),2),parseInt(sym.toString(2).substr(7,7),2)));
+		//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(sym));
 	  }
 
       function load(e) {
