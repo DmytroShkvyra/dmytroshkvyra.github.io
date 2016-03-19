@@ -209,8 +209,8 @@ and open the template in the editor.
         var decode = w.decode(frequencyData)
 
 		if(decode !== undefined){
-			//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(decode));
-			w.decodeSequence(decode, detected);
+			document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(decode));
+			//w.decodeSequence(decode, detected);
 		}
 
 		/*document.getElementById("walsh1").value = max;
@@ -336,8 +336,7 @@ and open the template in the editor.
 
           updateFrequencyResponse();
         }
-      }
-      ;
+      };
 
       function renderFrame() {
         analyser.getByteFrequencyData(frequencyData);
