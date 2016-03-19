@@ -166,10 +166,18 @@ and open the template in the editor.
         biquadFilter.frequency.value = 1000;
         biquadFilter.Q.value = 10;
         biquadFilter.gain.value = 20;
-
+        scriptProcessorNode = audioContext.createScriptProcessor(1024, 1, 1);
+		scriptProcessorNode.onaudioprocess = function(audioProcessingEvent){
+			analyser.getByteFrequencyData(frequencyData);
+			var decode = w.decode(frequencyData);
+			if(decode !== undefined){
+				//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(decode));
+				w.decodeSequence(decode, detected);
+			}
+		}
         analyser = audioContext.createAnalyser();
-      }
-      ;
+		scriptProcessorNode.connect(analyser);
+      };
 
 
       function updateFrame(frequencyData, step) {
@@ -206,17 +214,6 @@ and open the template in the editor.
         }
 
 		}
-        var decode = w.decode(frequencyData)
-
-		if(decode !== undefined){
-			//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(decode));
-			w.decodeSequence(decode, detected);
-		}
-
-		/*document.getElementById("walsh1").value = max;
-		document.getElementById("walsh2").value = w.sigma;
-		document.getElementById("walsh3").value = avg;
-        document.getElementById("maxFreq").value = maxFreq;*/
       };
       
 	  function detected(sym){
