@@ -7,7 +7,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
   this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
   this.dimesionLength = this.maxCodeLength/this.dimension|0;
-  this.maxSigma = 3
+  this.maxSigma = 3.9
   
   walsh.prototype.getCodes = function(code){
     var codeBin = code.toString(2);
