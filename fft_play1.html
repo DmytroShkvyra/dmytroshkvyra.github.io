@@ -20,10 +20,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
   this.dimension = (dimension !== undefined)? dimension : 2;
-  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
+  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 200;
   this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
   this.dimesionLength = this.maxCodeLength/this.dimension|0;
-  this.maxSigma = 3.9
+  this.maxSigma = 3.2
   
   walsh.prototype.getCodes = function(code){
     var codeBin = code.toString(2);
@@ -49,6 +49,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			codeArr[j] = codeArr[j] + currentCode[j];
 		}
 	}
+
+	for(var j=0;j<codeArr.length;j++){
+		codeArr[j] = codeArr[j] / this.dimension;
+	}
 	
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
     var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
@@ -56,10 +60,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
       if (codeArr[i] > 0) {
-		res[this.shift + 1 + this.step*i*2] = 1
+		res[this.shift + 1 + this.step*i*2] = codeArr[i]
       }
       else if (codeArr[i] < 0) {
-		res[this.shift + 1 + this.step*i*2+this.step] = 1
+		res[this.shift + 1 + this.step*i*2+this.step] = codeArr[i]*-1
 	  }
     }
     return new Float32Array(res);
@@ -141,26 +145,26 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		res[j] = (mags[j]> avg)? (mags[j]-avg)/this.sigma : 0;  
     }
 	
-    var codeStr = '';
+    var codeArr = [];
 	for (var i=0; i<this.dimension; i++){
 		var maxMagn = 0;
-		var codeBin;
-		for(var j=0; j<res.length/this.dimension|0; j++){
-			if((res[j+i*(res.length/this.dimension|0)]>maxMagn) && res[j+i*(res.length/this.dimension|0)]>this.maxSigma){
-				maxMagn = res[j+i*(res.length/this.dimension|0)];
-				codeBin = j+i*(res.length/this.dimension|0);
+		var codeBin = undefined;
+		for(var j=0; j<mags.length/this.dimension|0; j++){
+			if((res[j+i*(mags.length/this.dimension|0)]>maxMagn) && res[j+i*(mags.length/this.dimension|0)]>this.maxSigma){
+				maxMagn = res[j+i*(mags.length/this.dimension|0)];
+				codeBin = j;
 			}
 		}
 		if(codeBin === undefined) return undefined;
-		codeBin = codeBin.toString(2)
-		if(codeBin.length < this.maxCodeLength){
-			codeBin = '0'.repeat(this.maxCodeLength - codeBin.length) + codeBin;
-		}
-		
-		codeStr = codeStr+codeBin;
+		codeArr.push(codeBin);
+	}
+	codeArr = codeArr.reverse();
+    var charCode = 0;
+	for(var i=0; i<codeArr.length;i++){
+		charCode += (Math.pow(mags.length/this.dimension|0, i)*codeArr[i]);
 	}
 
-    return parseInt(codeStr,2);
+    return charCode;
   };
 
   // Encode sequece of sym to prevent repeating

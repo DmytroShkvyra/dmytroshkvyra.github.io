@@ -33,6 +33,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			codeArr[j] = codeArr[j] + currentCode[j];
 		}
 	}
+
+	for(var j=0;j<codeArr.length;j++){
+		codeArr[j] = codeArr[j] / this.dimension;
+	}
 	
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
     var res = new Array(lengthOfFFT).fill(0,0,lengthOfFFT);
@@ -40,10 +44,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
     for(var i= 0; i<codeArr.length; i++){
       var val = 0;
       if (codeArr[i] > 0) {
-		res[this.shift + 1 + this.step*i*2] = 1
+		res[this.shift + 1 + this.step*i*2] = codeArr[i]
       }
       else if (codeArr[i] < 0) {
-		res[this.shift + 1 + this.step*i*2+this.step] = 1
+		res[this.shift + 1 + this.step*i*2+this.step] = codeArr[i]*-1
 	  }
     }
     return new Float32Array(res);
