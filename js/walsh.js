@@ -137,8 +137,8 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		}
 		if(codeBin === undefined) return undefined;
 		codeBin = codeBin.toString(2)
-		if(codeBin.length < this.maxCodeLength){
-			codeBin = '0'.repeat(this.maxCodeLength - codeBin.length) + codeBin;
+		if(codeBin.length < this.dimesionLength){
+			codeBin = '0'.repeat(this.dimesionLength - codeBin.length) + codeBin;
 		}
 		
 		codeStr = codeStr+codeBin;
