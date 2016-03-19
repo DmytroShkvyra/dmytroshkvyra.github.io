@@ -247,8 +247,8 @@ for(var i=0; i<chars.length;i++){
 	codes.push(chars[i].charCodeAt(0));
 } 
 
-//var syms = w.encode(codes);
-var syms = codes;
+var syms = w.encode(codes);
+//var syms = codes;
 var waves = [];
 
     var fft = rate/parseInt(document.getElementById("f").value)|0;
