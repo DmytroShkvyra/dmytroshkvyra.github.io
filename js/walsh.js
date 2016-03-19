@@ -141,7 +141,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			codeBin = '0'.repeat(this.dimesionLength - codeBin.length) + codeBin;
 		}
 		
-		codeStr = codeStr+codeBin;
+		codeStr = codeBin + codeStr;
 	}
 
     return parseInt(codeStr,2);
