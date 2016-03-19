@@ -125,7 +125,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		res[j] = (mags[j]> avg)? (mags[j]-avg)/this.sigma : 0;  
     }
 	
-    var codeStr = '';
+    var codeArr = [];
 	for (var i=0; i<this.dimension; i++){
 		var maxMagn = 0;
 		var codeBin = undefined;
@@ -136,15 +136,20 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			}
 		}
 		if(codeBin === undefined) return undefined;
-		codeBin = codeBin.toString(2)
+		/*codeBin = codeBin.toString(2)
 		if(codeBin.length < this.dimesionLength){
 			codeBin = '0'.repeat(this.dimesionLength - codeBin.length) + codeBin;
-		}
+		}*/
 		
-		codeStr = codeStr+codeBin;
+		codeArr.push(codeBin);
+	}
+	codeArr = codeArr.reverse();
+    var charCode = 0;
+	for(var i=0; i<codeArr.length;i++){
+		charCode += Math.pow(mags.length/this.dimension|0, i);
 	}
 
-    return parseInt(codeStr,2);
+    return charCode;
   };
 
   // Encode sequece of sym to prevent repeating
