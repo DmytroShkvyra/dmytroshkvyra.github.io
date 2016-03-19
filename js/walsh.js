@@ -8,7 +8,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
   this.dimesionLength = this.maxCodeLength/this.dimension|0;
   //this.maxSigma = 3.2
-  this.maxSigma = 2
+  this.maxSigma = 4;
+  for(var i=1; i<this.dimension;i++){
+	this.maxSigma = Math.sqrt(this.maxSigma);  
+  }
   
   walsh.prototype.getCodes = function(code){
     var codeBin = code.toString(2);
