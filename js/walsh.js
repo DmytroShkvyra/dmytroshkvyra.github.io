@@ -4,10 +4,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
   this.dimension = (dimension !== undefined)? dimension : 2;
-  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 200;
+  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
   this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
   this.dimesionLength = this.maxCodeLength/this.dimension|0;
-  this.maxSigma = 3
+  this.maxSigma = 3.5
   
   walsh.prototype.getCodes = function(code){
     var codeBin = code.toString(2);
