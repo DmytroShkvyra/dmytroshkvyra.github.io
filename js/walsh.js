@@ -128,7 +128,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
     var codeStr = '';
 	for (var i=0; i<this.dimension; i++){
 		var maxMagn = 0;
-		var codeBin;
+		var codeBin = undefined;
 		for(var j=0; j<mags.length/this.dimension|0; j++){
 			if((res[j+i*(mags.length/this.dimension|0)]>maxMagn) && res[j+i*(mags.length/this.dimension|0)]>this.maxSigma){
 				maxMagn = res[j+i*(mags.length/this.dimension|0)];
