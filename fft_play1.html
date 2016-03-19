@@ -49,9 +49,13 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			codeArr[j] = codeArr[j] + currentCode[j];
 		}
 	}
+    var maxPeak = 0
+	for(var j=0;j<codeArr.length;j++){
+		if(Math.abs(codeArr[j])> maxPeak) maxPeak = Math.abs(codeArr[j]);
+	}
 
 	for(var j=0;j<codeArr.length;j++){
-		codeArr[j] = codeArr[j] / this.dimension;
+		codeArr[j] = codeArr[j] / maxPeak;
 	}
 	
     var lengthOfFFT = this.shift + 1 + codeArr.length*this.step*2;
@@ -63,7 +67,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		res[this.shift + 1 + this.step*i*2] = codeArr[i]
       }
       else if (codeArr[i] < 0) {
-		res[this.shift + 1 + this.step*i*2+this.step] = codeArr[i]*-1
+		res[this.shift + 1 + this.step*i*2+this.step] = Math.abs(codeArr[i]);
 	  }
     }
     return new Float32Array(res);
@@ -340,7 +344,7 @@ function click1() {
     <body>
 	<div>TODO write content</div>
 	<input value="21.533203125" id="f"/>
-	<input value="ABCDEFGHJLMNOP" id="sym"/>
+	<textarea id="sym">Et</textarea>
 	<input type="button" value="Play" onclick="play();"/>
 	<!--input type="button" value="Stop" onclick="stop();"/-->
   <input type="button" value="PlayWave" onclick="click1();"/>
