@@ -132,15 +132,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 		for(var j=0; j<mags.length/this.dimension|0; j++){
 			if((res[j+i*(mags.length/this.dimension|0)]>maxMagn) && res[j+i*(mags.length/this.dimension|0)]>this.maxSigma){
 				maxMagn = res[j+i*(mags.length/this.dimension|0)];
-				codeBin = j+i*(mags.length/this.dimension|0);
+				codeBin = j;
 			}
 		}
 		if(codeBin === undefined) return undefined;
-		/*codeBin = codeBin.toString(2)
-		if(codeBin.length < this.dimesionLength){
-			codeBin = '0'.repeat(this.dimesionLength - codeBin.length) + codeBin;
-		}*/
-		
 		codeArr.push(codeBin);
 	}
 	codeArr = codeArr.reverse();
