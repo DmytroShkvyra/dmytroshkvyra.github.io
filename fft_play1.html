@@ -244,7 +244,7 @@ rate = audioContext.sampleRate;
 var chars = document.getElementById("sym").value.split('');
 var codes = [];
 for(var i=0; i<chars.length;i++){
-	codes.push(chars[i].charCodeAt(0)-65);
+	codes.push(chars[i].charCodeAt(0));
 } 
 
 var syms = w.encode(codes);
