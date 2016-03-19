@@ -166,7 +166,7 @@ and open the template in the editor.
         biquadFilter.frequency.value = 1000;
         biquadFilter.Q.value = 10;
         biquadFilter.gain.value = 20;
-        scriptProcessorNode = audioContext.createScriptProcessor(2048, 1, 1);
+        scriptProcessorNode = audioContext.createScriptProcessor(1024, 1, 1);
 		scriptProcessorNode.onaudioprocess = function(audioProcessingEvent){
 			var frequencyData = new Uint8Array(analyser.frequencyBinCount);
 			analyser.getByteFrequencyData(frequencyData);
@@ -220,7 +220,7 @@ and open the template in the editor.
 	  function detected(sym){
 	    //String.fromCharCode(parseInt(sym.toString(2).substr(0,7),2),parseInt(sym.toString(2).substr(7,7),2))
 		//document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(parseInt(sym.toString(2).substr(0,6),2)+64,parseInt(sym.toString(2).substr(6,6),2)+64));
-		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(sym));
+		document.getElementById("walsh0").value = document.getElementById("walsh0").value + (String.fromCharCode(sym+65));
 	  }
 
       function load(e) {
