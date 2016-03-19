@@ -129,10 +129,10 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 	for (var i=0; i<this.dimension; i++){
 		var maxMagn = 0;
 		var codeBin;
-		for(var j=0; j<res.length/this.dimension|0; j++){
-			if((res[j+i*(res.length/this.dimension|0)]>maxMagn) && res[j+i*(res.length/this.dimension|0)]>this.maxSigma){
-				maxMagn = res[j+i*(res.length/this.dimension|0)];
-				codeBin = j+i*(res.length/this.dimension|0);
+		for(var j=0; j<mags.length/this.dimension|0; j++){
+			if((res[j+i*(mags.length/this.dimension|0)]>maxMagn) && res[j+i*(mags.length/this.dimension|0)]>this.maxSigma){
+				maxMagn = res[j+i*(mags.length/this.dimension|0)];
+				codeBin = j+i*(mags.length/this.dimension|0);
 			}
 		}
 		if(codeBin === undefined) return undefined;
