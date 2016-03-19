@@ -141,7 +141,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 	codeArr = codeArr.reverse();
     var charCode = 0;
 	for(var i=0; i<codeArr.length;i++){
-		charCode += Math.pow(mags.length/this.dimension|0, i);
+		charCode += (Math.pow(mags.length/this.dimension|0, i)*codeArr[i]);
 	}
 
     return charCode;
