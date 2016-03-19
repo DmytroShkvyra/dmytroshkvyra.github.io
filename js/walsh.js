@@ -4,7 +4,7 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   this.shift = (shift !== undefined)? shift: 45;
   this.step = (step !== undefined)? step: 3;
   this.dimension = (dimension !== undefined)? dimension : 2;
-  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 100;
+  this.tresholdTimeout = (tresholdTimeout !== undefined)? tresholdTimeout: 200;
   this.maxCodeLength = ((Math.pow(this.n/this.dimension, this.dimension)-1).toString(2)).length;
   this.dimesionLength = this.maxCodeLength/this.dimension|0;
   this.maxSigma = 3.5
@@ -185,12 +185,12 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
   walsh.prototype.decodeSequence = function(sym, detected){
     if(this.first === undefined){
 		this.first = sym;
-		//if(this.timerId !== undefined) clearTimeout(this.timerId)
-		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else if(this.first === sym){
-		//if(this.timerId !== undefined) clearTimeout(this.timerId)
-		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		return;
 	} else {
         var res;
@@ -200,8 +200,8 @@ function walsh(n, shift, step, dimension,  tresholdTimeout){
 			res = sym;
 		}
 		this.first = sym;
-		//if(this.timerId !== undefined) clearTimeout(this.timerId)
-		//this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
+		if(this.timerId !== undefined) clearTimeout(this.timerId)
+		this.timerId = setTimeout(this.clearSym, this.tresholdTimeout );
 		if(detected !== undefined) detected(res-1);
 	}
   }  
